@@ -100,6 +100,8 @@ public class HKDFTest {
 
     @Test
     public void hkdf() throws Exception {
+        checkLength(HKDF.hkdf(HkdfMacFactory.Default.hmacSha1(), RandomUtils.nextBytes(16), RandomUtils.nextBytes(16), null, 80), 80);
+        checkLength(HKDF.hkdfSha256(RandomUtils.nextBytes(16), RandomUtils.nextBytes(16), null, 80), 80);
     }
 
     @Test

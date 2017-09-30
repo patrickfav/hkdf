@@ -173,7 +173,7 @@ public final class HKDF {
      * @return new byte array of output keying material (OKM)
      */
     public static byte[] hkdfSha256(byte[] inputKeyingMaterial, byte[] saltExtract, byte[] infoExpand, int outLengthByte) {
-        return hkdf(HkdfMacFactory.Default.hmacSha256(), infoExpand, saltExtract, infoExpand, outLengthByte);
+        return hkdf(HkdfMacFactory.Default.hmacSha256(), inputKeyingMaterial, saltExtract, infoExpand, outLengthByte);
     }
 
     /**
