@@ -57,10 +57,6 @@ Use maven (3.1+) to create a jar including all dependencies
 * Java 7
 * Maven
 
-# Credits
-
-* HKDF implementation derived from [mozilla-services/android-sync](https://github.com/mozilla-services/android-sync)
-
 # License
 
 Copyright 2017 Patrick Favre-Bulle
