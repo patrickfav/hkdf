@@ -35,4 +35,13 @@ public final class Bytes {
         }
         return result;
     }
+
+    public static byte[] trim(byte[] bytes) {
+        int i = 0;
+        while (i < bytes.length - 1 && bytes[i] == 0) {
+            ++i;
+        }
+
+        return Arrays.copyOf(bytes, bytes.length - i);
+    }
 }

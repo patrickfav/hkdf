@@ -215,7 +215,7 @@ public final class HKDF {
          * @return a new byte array pseudorandom key (of hash length in bytes) (PRK) which can be used to expand
          */
         byte[] hkdfExtract(byte[] inputKeyingMaterial, byte[] salt) {
-            if (salt == null) {
+            if (salt == null || salt.length == 0) {
                 salt = new byte[macFactory.macHashLengthByte()];
             }
 
