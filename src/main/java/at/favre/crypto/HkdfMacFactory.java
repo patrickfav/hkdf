@@ -40,6 +40,11 @@ interface HkdfMacFactory {
             return new Default("HmacSHA512", 512 / 8);
         }
 
+        @Deprecated
+        public static HkdfMacFactory hmacSha1() {
+            return new Default("HmacSha1", 160 / 8);
+        }
+
         Default(String macAlgorithmName, int hashLengthBytes) {
             this.macAlgorithmName = macAlgorithmName;
             this.hashLengthBytes = hashLengthBytes;

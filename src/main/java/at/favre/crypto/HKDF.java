@@ -37,11 +37,8 @@
 
 package at.favre.crypto;
 
-import at.favre.util.Bytes;
-
 import javax.crypto.Mac;
-import java.nio.ByteBuffer;
-import java.util.Arrays;
+import java.io.ByteArrayOutputStream;
 
 
 /**
@@ -223,7 +220,9 @@ public final class HKDF {
                 throw new IllegalArgumentException("provided inputKeyingMaterial must be at least of size 1 and not null");
             }
 
-            return hmacDigest(inputKeyingMaterial, macFactory.createMacInstance(salt));
+            Mac mac = macFactory.createMacInstance(salt);
+            mac.update(inputKeyingMaterial);
+            return mac.doFinal();
         }
     }
 
@@ -243,7 +242,7 @@ public final class HKDF {
          *
          * @param pseudoRandomKey a pseudorandom key of at least hmac hash length in bytes (usually, the output from the extract step)
          * @param info            optional context and application specific information; may be null
-         * @param outLengthBytes  length of output keying material in bytes
+         * @param outLengthBytes  length of output keying material in bytes (must be <= 255 * mac hash length)
          * @return new byte array of output keying material (OKM)
          */
         byte[] hkdfExpand(byte[] pseudoRandomKey, byte[] info, int outLengthBytes) {
@@ -262,29 +261,31 @@ public final class HKDF {
                 info = new byte[0];
             }
 
-            byte[] output = new byte[0];
             byte[] blockN = new byte[0];
 
             int iterations = (int) Math.ceil(((double) outLengthBytes) / ((double) macFactory.macHashLengthByte()));
 
-            for (int i = 0; i < iterations; i++) {
-                blockN = hmacDigest(Bytes.concat(blockN, info, ByteBuffer.allocate(4).putInt(i + 1).array()), hmacHasher);
-                output = Bytes.concat(output, blockN);
+            if (iterations > 255) {
+                throw new IllegalArgumentException("out length must be maximal 255 * hash len");
             }
 
-            return Arrays.copyOfRange(output, 0, outLengthBytes);
-        }
-    }
+            ByteArrayOutputStream stream = new ByteArrayOutputStream(outLengthBytes);
+            int remainingBytes = outLengthBytes;
 
-    /**
-     * Hash bytes with given hasher
-     * Input: message to hash, HMAC hasher
-     * Output: hashed byte[].
-     */
-    private static byte[] hmacDigest(byte[] message, Mac hasher) {
-        hasher.update(message);
-        byte[] ret = hasher.doFinal();
-        hasher.reset();
-        return ret;
+            for (int i = 0; i < iterations; i++) {
+                hmacHasher.update(blockN);
+                hmacHasher.update(info);
+                hmacHasher.update((byte) (i + 1));
+
+                blockN = hmacHasher.doFinal();
+
+                int stepSize = Math.min(remainingBytes, blockN.length);
+
+                stream.write(blockN, 0, stepSize);
+                remainingBytes -= stepSize;
+            }
+
+            return stream.toByteArray();
+        }
     }
 }
