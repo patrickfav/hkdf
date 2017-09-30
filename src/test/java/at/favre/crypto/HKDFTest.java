@@ -90,6 +90,12 @@ public class HKDFTest {
             fail();
         } catch (Exception e) {
         }
+
+        try {
+            HKDF.expandHmacSha256(RandomUtils.nextBytes(16), RandomUtils.nextBytes(8), 256 * 32);
+            fail();
+        } catch (Exception e) {
+        }
     }
 
     @Test
