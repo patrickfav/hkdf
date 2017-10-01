@@ -20,7 +20,6 @@ public class RFC5869TestCases {
                 "3cb25f25faacd57a90434f64d0362f2a2d2d0a90cf1a5a4c5db02d56ecc4c5bf34007208d5b887185865");
     }
 
-
     @Test
     public void rfc5869testCase2() throws Exception {
         String PRK = "06a6b88c5853361a06104c9ceb35b45cef760014904671014a193f40c15fc244";
@@ -112,6 +111,24 @@ public class RFC5869TestCases {
 
         checkStep1Sha1(IKM, salt, PRK);
         checkStep2Sha1(PRK, info, L, OKM);
+    }
+
+    @Test
+    public void inOfficialTestCase1Sha512() throws Exception {
+        String PRK = "665799823737DED04A88E47E54A5890BB2C3D247C7A4254A8E61350723590A26C36238127D8661B88CF80EF802D57E2F7CEBCF1E00E083848BE19929C61B4237";
+        checkStep1Sha512("0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b",
+                "000102030405060708090a0b0c", PRK);
+        checkStep2Sha512(PRK,
+                "f0f1f2f3f4f5f6f7f8f9", 42,
+                "832390086CDA71FB47625BB5CEB168E4C8E26A1A16ED34D9FC7FE92C1481579338DA362CB8D9F925D7CB");
+    }
+
+    private void checkStep1Sha512(String ikm, String salt, String prk) throws Exception {
+        checkStep1(HkdfMacFactory.Default.hmacSha512(), ikm, salt, prk);
+    }
+
+    private void checkStep2Sha512(String prk, String info, int l, String okm) throws Exception {
+        checkStep2(HkdfMacFactory.Default.hmacSha512(), prk, info, l, okm);
     }
 
     private void checkStep1Sha256(String ikm, String salt, String prk) throws Exception {
