@@ -1,8 +1,8 @@
 # HKDF
 
-Hashed Message Authentication Code (HMAC)-based key derivation function (HKDF), can be used as a building block in various protocols and applications.  The key derivation function (KDF) is intended to support a wide range of applications and requirements, and is conservative in its use of cryptographic hash functions.
+[Hashed Message Authentication Code](https://en.wikipedia.org/wiki/Hash-based_message_authentication_code) (HMAC)-based key derivation function ([HKDF](https://en.wikipedia.org/wiki/HKDF)), can be used as a building block in various protocols and applications.  The [key derivation function](https://en.wikipedia.org/wiki/Key_derivation_function) (KDF) is intended to support a wide range of applications and requirements, and is conservative in its use of [cryptographic hash functions](https://en.wikipedia.org/wiki/Cryptographic_hash_function). See [RFC 5869](https://tools.ietf.org/html/rfc5869) for full detail.
 
-This is supposed to be a standalone, simple to use, fully tested and stable implementation in Java. The code compiled with Java 7 to be compatible with most _Android_ versions as well as normal Java applications.
+This is supposed to be a standalone, simple to use, fully tested and stable implementation in Java. The code compiled with [Java 7](https://en.wikipedia.org/wiki/Java_version_history#Java_SE_7) to be compatible with most [_Android_](https://www.android.com/) versions as well as normal Java applications.
 
  [![GitHub release](https://img.shields.io/github/release/patrickfav/hkdf.svg)](https://github.com/patrickfav/hkdf/releases/latest)
 [![Build Status](https://travis-ci.org/patrickfav/hkdf.svg?branch=master)](https://travis-ci.org/patrickfav/hkdf)
@@ -32,7 +32,7 @@ user input and encrypts with [CBC](https://en.wikipedia.org/wiki/Block_cipher_mo
 
 ```java
 //if no dynamic salt is available, a static salt is better than null
-        byte[] staticSalt32Byte = new byte[]{(byte) 0xDA, (byte) 0xAC, 0x3E, 0x10, 0x55, (byte) 0xB5, (byte) 0xF1, 0x3E, 0x53, (byte) 0xE4, 0x70, (byte) 0xA8, 0x77, 0x79, (byte) 0x8E, 0x0A, (byte) 0x89, (byte) 0xAE, (byte) 0x96, 0x5F, 0x19, 0x5D, 0x53, 0x62, 0x58, (byte) 0x84, 0x2C, 0x09, (byte) 0xAD, 0x6E, 0x20, (byte) 0xD4};
+byte[] staticSalt32Byte = new byte[]{(byte) 0xDA, (byte) 0xAC, 0x3E, 0x10, 0x55, (byte) 0xB5, (byte) 0xF1, 0x3E, 0x53, (byte) 0xE4, 0x70, (byte) 0xA8, 0x77, 0x79, (byte) 0x8E, 0x0A, (byte) 0x89, (byte) 0xAE, (byte) 0x96, 0x5F, 0x19, 0x5D, 0x53, 0x62, 0x58, (byte) 0x84, 0x2C, 0x09, (byte) 0xAD, 0x6E, 0x20, (byte) 0xD4};
 
 //example input
 String userInput = "this is a user input with bad entropy";
@@ -98,21 +98,21 @@ Note that some existing KDF specifications, such as NIST Special Publication 800
 
 HKDF is intended for use in a wide variety of KDF applications. Some applications will not be able to use HKDF "as-is" due to specific operational requirements. One significant example is the derivation of cryptographic keys from a source of low entropy, such as a user's password. In the case of password-based KDFs, a main goal is to slow down dictionary attacks HKDF naturally accommodates the use of salt; however, a slowing down mechanism is not part of this specification. Therfore other KDFs might be considered like: PKDF2, bcryt, scrypt or Argon2
 
-### Key Derivation
+#### Key Derivation
 
 The following examples are from [RFC5869 Section 4](https://tools.ietf.org/html/rfc5869#section-4):
 
 * The derivation of cryptographic keys from a shared Diffie-Hellman value in a key-agreement protocol.
-* The derivation of symmetric keys from a hybrid public-key encryption scheme
+* The derivation of symmetric keys from a hybrid public-key encryption scheme.
 * Key derivation for key-wrapping mechanisms.
 
-#### Creating multiple keys from a single input
+##### Creating multiple keys from a single input
 
 The expand phase includes an "info" parameter which should be used to create
 multiple key material from a single PRK source. For example a Secret Key and
 IV from a shared Diffie-Hellman Value.
 
-### Pseudorandom number generator (PRNG)
+#### Pseudorandom number generator (PRNG)
 
 These two functions may also be combined and used to form a PRNG to improve a random number generator's potentially-biased output, as well as protect it from analysis and help defend the random number generation from malicious inputs.
 
@@ -161,7 +161,7 @@ Use maven (3.1+) to create a jar including all dependencies
 * Java 7
 * Maven
 
-## HKDF Implementations (Java)
+## HKDF Implementations in Java
 
 * [Mozilla: sync-crypto](https://github.com/mozilla-services/sync-crypto/blob/master/src/main/java/org/mozilla/android/sync/crypto/HKDF.java)
 * [WhisperSystems: libsignal-protocol-java](https://github.com/WhisperSystems/libsignal-protocol-java/blob/master/java/src/main/java/org/whispersystems/libsignal/kdf/HKDF.java)
