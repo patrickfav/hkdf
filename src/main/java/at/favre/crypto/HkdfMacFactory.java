@@ -32,14 +32,28 @@ interface HkdfMacFactory {
         private final String macAlgorithmName;
         private final int hashLengthBytes;
 
+        /**
+         * Creates a factory creating HMAC with SHA-256
+         *
+         * @return factory
+         */
         public static HkdfMacFactory hmacSha256() {
             return new Default("HmacSHA256", 256 / 8);
         }
 
+        /**
+         * Creates a factory creating HMAC with SHA-512
+         * @return factory
+         */
         public static HkdfMacFactory hmacSha512() {
             return new Default("HmacSHA512", 512 / 8);
         }
 
+        /**
+         * Creates a factory creating HMAC with SHA-1
+         * @deprecated sha1 with HMAC should be fine, but not recommended for new protocols
+         * @return factory
+         */
         @Deprecated
         public static HkdfMacFactory hmacSha1() {
             return new Default("HmacSha1", 160 / 8);

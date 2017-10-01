@@ -5,11 +5,41 @@ import org.apache.commons.lang3.RandomUtils;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.GCMParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
+
 import static org.junit.Assert.*;
 
 public class HKDFTest {
     @Before
     public void setUp() throws Exception {
+    }
+
+    @Test
+    public void simpleUseCase() throws Exception {
+        //if no dynamic salt is available, a static salt is better than null
+        byte[] staticSalt32Byte = new byte[]{(byte) 0xDA, (byte) 0xAC, 0x3E, 0x10, 0x55, (byte) 0xB5, (byte) 0xF1, 0x3E, 0x53, (byte) 0xE4, 0x70, (byte) 0xA8, 0x77, 0x79, (byte) 0x8E, 0x0A, (byte) 0x89, (byte) 0xAE, (byte) 0x96, 0x5F, 0x19, 0x5D, 0x53, 0x62, 0x58, (byte) 0x84, 0x2C, 0x09, (byte) 0xAD, 0x6E, 0x20, (byte) 0xD4};
+
+        //example input
+        String userInput = "this is a user input with bad entropy";
+
+        //extract the "raw" data to create output with even entropy
+        byte[] extracted = HKDF.extractHmacSha256(userInput.getBytes(StandardCharsets.UTF_8), staticSalt32Byte);
+
+        //create expanded bytes for e.g. AES secret key and IV
+        byte[] expandedAesKey = HKDF.expandHmacSha256(extracted,
+                "AES-Key".getBytes(StandardCharsets.UTF_8), 16);
+        byte[] expandedIv = HKDF.expandHmacSha256(extracted,
+                "AES-IV".getBytes(StandardCharsets.UTF_8), 12);
+
+        //Example boilerplate encrypting a simple string with created key/iv
+        SecretKey key = new SecretKeySpec(expandedAesKey, "AES"); //AES-128 key
+        Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
+        cipher.init(Cipher.ENCRYPT_MODE, key, new GCMParameterSpec(128, expandedIv));
+        byte[] encrypted = cipher.doFinal("my secret message".getBytes(StandardCharsets.UTF_8));
     }
 
     @Test
