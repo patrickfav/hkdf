@@ -4,9 +4,15 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>at.favre.crypto</groupId>
+    <groupId>at.favre.lib</groupId>
     <artifactId>hkdf</artifactId>
     <version>0.1.0</version>
+
+    <name>HMAC-based Extract-and-Expand Key Derivation Function implementation (RFC5869)</name>
+    <description>A standalone Java implementation of HMAC-based key derivation function (HKDF) defined in RFC 5869 first
+        described by Hugo Krawczyk. It is special as it supports 2 Phases: Extract and Expand.
+    </description>
+    <url>https://github.com/patrickfav/hkdf</url>
 
     <prerequisites>
         <maven>3.1.0</maven>
@@ -118,10 +124,7 @@
             </plugin>
         </plugins>
     </build>
-
     <dependencies>
-        <!-- command line interface -->
-
         <!-- test -->
         <dependency>
             <groupId>junit</groupId>
@@ -139,6 +142,33 @@
             <artifactId>commons-codec</artifactId>
             <version>1.10</version>
         </dependency>
-
     </dependencies>
+    <developers>
+        <developer>
+            <id>patrickfav</id>
+            <name>Patrick Favre-Bulle</name>
+            <email>patrick.favrebulle@gmail.com</email>
+        </developer>
+    </developers>
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <scm>
+        <connection>https://github.com/patrickfav/hkdf.git</connection>
+        <developerConnection>https://github.com/patrickfav/hkdf.git</developerConnection>
+        <tag>HEAD</tag>
+        <url>https://github.com/patrickfav/hkdf</url>
+    </scm>
+    <issueManagement>
+        <system>Github</system>
+        <url>https://github.com/patrickfav/hkdf/issues</url>
+    </issueManagement>
+    <ciManagement>
+        <system>Travis</system>
+        <url>https://travis-ci.org/patrickfav/hkdf</url>
+    </ciManagement>
 </project>
