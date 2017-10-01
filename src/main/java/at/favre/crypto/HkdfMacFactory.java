@@ -3,6 +3,7 @@ package at.favre.crypto;
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 
 /**
@@ -11,7 +12,8 @@ import java.security.NoSuchAlgorithmException;
 interface HkdfMacFactory {
 
     /**
-     * Creates a new instance of Hmac with given key
+     * Creates a new instance of Hmac with given key, i.e. it must already be initialized
+     * with {@link Mac#init(Key)}.
      *
      * @param key the key used, must not be null
      * @return a new mac instance

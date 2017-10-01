@@ -2,13 +2,15 @@
 
 Hashed Message Authentication Code (HMAC)-based key derivation function (HKDF), can be used as a building block in various protocols and applications.  The key derivation function (KDF) is intended to support a wide range of applications and requirements, and is conservative in its use of cryptographic hash functions.
 
+This is supposed to be a standalone, simple to use, fully tested and stable implementation in Java. The code compiled with Java 7 to be compatible with most _Android_ versions as well as normal Java applications.
+
  [![GitHub release](https://img.shields.io/github/release/patrickfav/hkdf.svg)](https://github.com/patrickfav/hkdf/releases/latest)
 [![Build Status](https://travis-ci.org/patrickfav/hkdf.svg?branch=master)](https://travis-ci.org/patrickfav/hkdf)
 [![Coverage Status](https://coveralls.io/repos/github/patrickfav/hkdf/badge.svg?branch=master)](https://coveralls.io/github/patrickfav/hkdf?branch=master)
 
 ## Quickstart
 
-Add dependency to your pom.xml:
+Add dependency to your `pom.xml`:
 
     <dependency>
         <groupId>at.favre.lib</groupId>
@@ -53,8 +55,66 @@ yte[] encrypted = cipher.doFinal("my secret message".getBytes(StandardCharsets.U
 
 ## Download
 
-**[Grab jar from latest Release](https://github.com/patrickfav/hkdf/releases/latest)**
+The artifacts are deployed to [jcenter](https://bintray.com/bintray/jcenter) and [Maven Central](https://search.maven.org/).
 
+### Maven
+
+Add dependency to your `pom.xml`:
+
+    <dependency>
+        <groupId>at.favre.lib</groupId>
+        <artifactId>hkdf</artifactId>
+        <version>{latest-version}</version>
+    </dependency>
+
+### Gradle
+
+Add to your `build.gradle` module dependencies:
+
+    compile group: 'at.favre.lib', name: 'hkdf', version: '{latest-version}'
+
+### Local Jar
+
+[Grab jar from latest release.](https://github.com/patrickfav/hkdf/releases/latest)
+
+
+## Description
+
+For the full description see the [RFC 5869](https://tools.ietf.org/html/rfc5869). For
+an in-depth discussion about the security considerations [see the Paper "Cryptographic Extraction and Key Derivation: The HKDF Scheme (2010)" by Hugo Krawczyk](https://eprint.iacr.org/2010/264). The following
+is a summary of the 2 sources above. If there seems to be a contradiction, the original
+sources are always correct over this.
+
+### Extract and Expand
+
+HKDF follows the "extract-then-expand" paradigm, where the KDF logically consists of two modules.
+
+1. To "extract" (condense/blend) entropy from a larger random source to provide a more uniformly unbiased and higher entropy but smaller output. This is done by utilising the diffusion properties of cryptographic MACs.
+2. To "expand" the generated output of an already reasonably random input such as an existing shared key into a larger cryptographically independent output, thereby producing multiple keys deterministically from that initial shared key, so that the same process may produce those same secret keys safely on multiple devices, as long as the same inputs are utilised.
+
+Note that some existing KDF specifications, such as NIST Special Publication 800-56A, NIST Special Publication 800-108 and IEEE Standard 1363a-2004, either only consider the second stage (expanding a pseudorandom key), or do not explicitly differentiate between the "extract" and "expand" stages, often resulting in design shortcomings.  The goal of this HKDF is to accommodate a wide range of KDF requirements while minimizing the assumptions about the underlying hash function.
+
+### Use Cases
+
+HKDF is intended for use in a wide variety of KDF applications. Some applications will not be able to use HKDF "as-is" due to specific operational requirements. One significant example is the derivation of cryptographic keys from a source of low entropy, such as a user's password. In the case of password-based KDFs, a main goal is to slow down dictionary attacks HKDF naturally accommodates the use of salt; however, a slowing down mechanism is not part of this specification. Therfore other KDFs might be considered like: PKDF2, bcryt, scrypt or Argon2
+
+### Key Derivation
+
+The following examples are from [RFC5869 Section 4](https://tools.ietf.org/html/rfc5869#section-4):
+
+* The derivation of cryptographic keys from a shared Diffie-Hellman value in a key-agreement protocol.
+* The derivation of symmetric keys from a hybrid public-key encryption scheme
+* Key derivation for key-wrapping mechanisms.
+
+#### Creating multiple keys from a single input
+
+The expand phase includes an "info" parameter which should be used to create
+multiple key material from a single PRK source. For example a Secret Key and
+IV from a shared Diffie-Hellman Value.
+
+### Pseudorandom number generator (PRNG)
+
+These two functions may also be combined and used to form a PRNG to improve a random number generator's potentially-biased output, as well as protect it from analysis and help defend the random number generation from malicious inputs.
 
 ## Digital Signatures
 
@@ -100,6 +160,13 @@ Use maven (3.1+) to create a jar including all dependencies
 
 * Java 7
 * Maven
+
+## HKDF Implementations (Java)
+
+* [Mozilla: sync-crypto](https://github.com/mozilla-services/sync-crypto/blob/master/src/main/java/org/mozilla/android/sync/crypto/HKDF.java)
+* [WhisperSystems: libsignal-protocol-java](https://github.com/WhisperSystems/libsignal-protocol-java/blob/master/java/src/main/java/org/whispersystems/libsignal/kdf/HKDF.java)
+* [Square: keywhiz](https://github.com/square/keywhiz/blob/master/hkdf/src/main/java/keywhiz/hkdf/Hkdf.java)
+* [Bouncy Castle](https://github.com/bcgit/bc-java/blob/master/core/src/main/java/org/bouncycastle/crypto/generators/HKDFBytesGenerator.java)
 
 # License
 
