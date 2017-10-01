@@ -162,7 +162,7 @@ public final class HKDF {
     /* ********************************************************************* EXTRACT & EXPAND */
 
     /**
-     * Convenience method for extract & expand in a single method.
+     * Convenience method for extract &amp; expand in a single method.
      * <p>
      * Uses Hmac with Sha256.
      *
@@ -177,7 +177,7 @@ public final class HKDF {
     }
 
     /**
-     * Convenience method for extract & expand in a single method
+     * Convenience method for extract &amp; expand in a single method
      *
      * @param macFactory          factory creating the used mac algorithm
      * @param inputKeyingMaterial data to be extracted (IKM)

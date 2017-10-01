@@ -6,9 +6,9 @@
 
     <groupId>at.favre.lib</groupId>
     <artifactId>hkdf</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.1</version>
 
-    <name>HMAC-based Extract-and-Expand Key Derivation Function implementation (RFC5869)</name>
+    <name>HKDF-RFC5869</name>
     <description>A standalone Java implementation of HMAC-based key derivation function (HKDF) defined in RFC 5869 first
         described by Hugo Krawczyk. It is special as it supports 2 Phases: Extract and Expand.
     </description>
@@ -59,6 +59,32 @@
                         <version>2.0.5</version>
                     </dependency>
                 </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.0.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.0.0-M1</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -124,6 +150,7 @@
             </plugin>
         </plugins>
     </build>
+
     <dependencies>
         <!-- test -->
         <dependency>
@@ -150,6 +177,15 @@
             <email>patrick.favrebulle@gmail.com</email>
         </developer>
     </developers>
+
+    <distributionManagement>
+        <repository>
+            <id>bintray-patrickfav</id>
+            <name>patrickfav-hkdf</name>
+            <url>https://api.bintray.com/maven/patrickfav/maven/hkdf/;publish=1</url>
+        </repository>
+    </distributionManagement>
+
     <licenses>
         <license>
             <name>Apache License, Version 2.0</name>
@@ -157,16 +193,19 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
+
     <scm>
         <connection>https://github.com/patrickfav/hkdf.git</connection>
         <developerConnection>https://github.com/patrickfav/hkdf.git</developerConnection>
         <tag>HEAD</tag>
         <url>https://github.com/patrickfav/hkdf</url>
     </scm>
+
     <issueManagement>
         <system>Github</system>
         <url>https://github.com/patrickfav/hkdf/issues</url>
     </issueManagement>
+
     <ciManagement>
         <system>Travis</system>
         <url>https://travis-ci.org/patrickfav/hkdf</url>
