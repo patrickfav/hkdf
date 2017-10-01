@@ -31,7 +31,7 @@ interface HkdfMacFactory {
     /**
      * Default implementation
      */
-    class Default implements HkdfMacFactory {
+    final class Default implements HkdfMacFactory {
         private final String macAlgorithmName;
         private final int hashLengthBytes;
         private final Provider provider;
@@ -71,7 +71,7 @@ interface HkdfMacFactory {
          * @param macAlgorithmName as used by {@link Mac#getInstance(String)}
          * @param hashLengthBytes  hash length size of used mac in bytes
          */
-        Default(String macAlgorithmName, int hashLengthBytes) {
+        public Default(String macAlgorithmName, int hashLengthBytes) {
             this(macAlgorithmName, hashLengthBytes, null);
         }
 
@@ -82,7 +82,7 @@ interface HkdfMacFactory {
          * @param hashLengthBytes  hash length size of used mac in bytes
          * @param provider         what security provider, see {@link Mac#getInstance(String, Provider)}; may be null to use default
          */
-        Default(String macAlgorithmName, int hashLengthBytes, Provider provider) {
+        public Default(String macAlgorithmName, int hashLengthBytes, Provider provider) {
             this.macAlgorithmName = macAlgorithmName;
             this.hashLengthBytes = hashLengthBytes;
             this.provider = provider;

@@ -9,6 +9,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
+import java.security.Security;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
@@ -62,7 +63,7 @@ public class HKDFTest {
     @Test
     public void customHmac() throws Exception {
         //don't use md5, this is just an example
-        HKDF hkdfMd5 = HKDF.from(new HkdfMacFactory.Default("HmacMD5", 16));
+        HKDF hkdfMd5 = HKDF.from(new HkdfMacFactory.Default("HmacMD5", 16, Security.getProvider("SunJCE")));
 
         byte[] lowEntropyInput = new byte[]{0x62, 0x58, (byte) 0x84, 0x2C};
         byte[] outputKeyingMaterial = hkdfMd5.extractAndExpand(lowEntropyInput, null, null, 32);

@@ -50,12 +50,18 @@ byte[] expandedIv = hkdf.expand(pseudoRandomKey, "aes-iv".getBytes(StandardChars
 SecretKey key = new SecretKeySpec(expandedAesKey, "AES"); //AES-128 key
 Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
 cipher.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(expandedIv));
-yte[] encrypted = cipher.doFinal("my secret message".getBytes(StandardCharsets.UTF_8));
+byte[] encrypted = cipher.doFinal("my secret message".getBytes(StandardCharsets.UTF_8));
 ```
 
 ### Using custom HMAC implementation
 
+```java
+//don't use md5, this is just an example
+HKDF hkdfMd5 = HKDF.from(new HkdfMacFactory.Default("HmacMD5", 16, Security.getProvider("SunJCE")));
 
+byte[] lowEntropyInput = new byte[]{0x62, 0x58, (byte) 0x84, 0x2C};
+byte[] outputKeyingMaterial = hkdfMd5.extractAndExpand(lowEntropyInput, null, null, 32);
+```
 
 ## Download
 
