@@ -6,6 +6,7 @@ This is supposed to be a standalone, simple to use, fully tested and stable impl
 
  [![GitHub release](https://img.shields.io/github/release/patrickfav/hkdf.svg)](https://github.com/patrickfav/hkdf/releases/latest)
 [![Build Status](https://travis-ci.org/patrickfav/hkdf.svg?branch=master)](https://travis-ci.org/patrickfav/hkdf)
+[![Javadocs](https://www.javadoc.io/badge/at.favre.lib/hkdf.svg)](https://www.javadoc.io/doc/at.favre.lib/hkdf)
 [![Coverage Status](https://coveralls.io/repos/github/patrickfav/hkdf/badge.svg?branch=master)](https://coveralls.io/github/patrickfav/hkdf?branch=master)
 
 ## Quickstart
@@ -106,7 +107,7 @@ Note that some existing KDF specifications, such as NIST Special Publication 800
 
 ### Use Cases
 
-HKDF is intended for use in a wide variety of KDF applications. Some applications will not be able to use HKDF "as-is" due to specific operational requirements. One significant example is the derivation of cryptographic keys from a source of low entropy, such as a user's password. In the case of password-based KDFs, a main goal is to slow down dictionary attacks HKDF naturally accommodates the use of salt; however, a slowing down mechanism is not part of this specification. Therfore other KDFs might be considered like: PKDF2, bcryt, scrypt or Argon2
+HKDF is intended for use in a wide variety of KDF applications. Some applications _will not be able_ to use HKDF "as-is" due to specific operational requirements. One significant example is the derivation of cryptographic keys from a source of low entropy, such as a user's password. In the case of _password-based KDFs_, a main goal is to slow down dictionary attacks. HKDF naturally accommodates the use of salt; _however, a slowing down mechanism is not part of this specification_. Therefore, for a user's password, other KDFs might be considered like: [PKDF2](https://en.wikipedia.org/wiki/PBKDF2), [bcryt](https://en.wikipedia.org/wiki/Bcrypt), [scrypt](https://en.wikipedia.org/wiki/Scrypt) or [Argon2](https://github.com/P-H-C/phc-winner-argon2) which are all designed to be computationally intensive.
 
 #### Key Derivation
 

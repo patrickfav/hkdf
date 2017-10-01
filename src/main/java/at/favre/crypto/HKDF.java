@@ -19,7 +19,6 @@ import java.io.ByteArrayOutputStream;
  * This implementation is thread safe without the need for synchronization.
  * <p>
  * Simple Example:
- * <p>
  * <pre>
  *     byte[] pseudoRandomKey = HKDF.fromHmacSha256().extract(lowEntropyInput, null);
  *     byte[] outputKeyingMaterial = HKDF.fromHmacSha256().expand(pseudoRandomKey, null, 64);
@@ -87,7 +86,6 @@ public final class HKDF {
      * This is done by utilising the diffusion properties of cryptographic MACs.
      * <p>
      * <strong>About Salts (from RFC 5869):</strong>
-     * <p>
      * <blockquote>
      * HKDF is defined to operate with and without random salt.  This is
      * done to accommodate applications where a salt value is not available.
@@ -116,7 +114,6 @@ public final class HKDF {
      * are utilised.
      * <p>
      * <strong>About Info (from RFC 5869):</strong>
-     * <p>
      * <blockquote>
      * While the 'info' value is optional in the definition of HKDF, it is
      * often of great importance in applications.  Its main objective is to
