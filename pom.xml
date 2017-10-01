@@ -6,7 +6,7 @@
 
     <groupId>at.favre.lib</groupId>
     <artifactId>hkdf</artifactId>
-    <version>0.1.1</version>
+    <version>0.1.2</version>
 
     <name>HKDF-RFC5869</name>
     <description>A standalone Java implementation of HMAC-based key derivation function (HKDF) defined in RFC 5869 first
@@ -132,7 +132,7 @@
             <plugin>
                 <groupId>net.nicoulaj.maven.plugins</groupId>
                 <artifactId>checksum-maven-plugin</artifactId>
-                <version>1.5</version>
+                <version>1.6</version>
                 <executions>
                     <execution>
                         <goals>
@@ -144,7 +144,9 @@
                     <algorithms>
                         <algorithm>SHA-256</algorithm>
                     </algorithms>
-                    <attachChecksums>true</attachChecksums>
+                    <shasumSummary>true</shasumSummary>
+                    <shasumSummaryFile>checksum-sha256.txt</shasumSummaryFile>
+                    <attachChecksums>false</attachChecksums>
                     <quiet>false</quiet>
                 </configuration>
             </plugin>

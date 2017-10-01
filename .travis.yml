@@ -26,6 +26,7 @@ deploy:
     file:
       - "target/hkdf-*.jar"
       - "target/*.sha256"
+      - "target/checksum-sha256.txt"
     skip_cleanup: true
     on:
       branch: master
