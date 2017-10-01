@@ -15,144 +15,151 @@ import java.io.ByteArrayOutputStream;
  * pseudorandom keys (the output of the KDF).
  * <p>
  * HKDF was first described by Hugo Krawczyk.
+ * <p>
+ * This implementation is thread safe without the need for synchronization.
+ * <p>
+ * Simple Example:
+ *
+ * <pre>
+ *     byte[] pseudoRandomKey = HKDF.fromHmacSha256().extract(lowEntropyInput, null);
+ *     byte[] outputKeyingMaterial = HKDF.fromHmacSha256().expand(pseudoRandomKey, null, 64);
+ * </pre>
  *
  * @see <a href="https://tools.ietf.org/html/rfc5869">RFC 5869</a>
  * @see <a href="https://eprint.iacr.org/2010/264.pdf">Cryptographic Extraction and Key Derivation:
  * The HKDF Scheme</a>
+ * @see <a href="https://en.wikipedia.org/wiki/HKDF">Wikipedia: HKDF</a>
  */
 public final class HKDF {
-    private HKDF() {
+    /**
+     * Cache instances
+     */
+    private static HKDF hkdfHmacSha256;
+    private static HKDF hkdfHmacSha512;
+
+    private final HkdfMacFactory macFactory;
+
+    private HKDF(HkdfMacFactory macFactory) {
+        this.macFactory = macFactory;
     }
 
-    /* ************************************************************************** EXTRACT */
+    /**
+     * Return a shared instance using HMAC with Sha256.
+     * Even thou shared, this instance is thread-safe.
+     *
+     * @return HKDF instance
+     */
+    public static HKDF fromHmacSha256() {
+        if (hkdfHmacSha256 == null) {
+            hkdfHmacSha256 = from(HkdfMacFactory.Default.hmacSha256());
+        }
+        return hkdfHmacSha256;
+    }
 
     /**
-     * The first stage takes the input keying material and "extracts" from it a fixed-length pseudorandom
-     * key K. The goal of the "extract" stage is to "concentrate" the possibly dispersed entropy of the input
-     * keying material into a short, but cryptographically strong, pseudorandom key.
+     * Return a shared instance using HMAC with Sha512.
+     * Even thou shared, this instance is thread-safe.
+     *
+     * @return HKDF instance
+     */
+    public static HKDF fromHmacSha512() {
+        if (hkdfHmacSha512 == null) {
+            hkdfHmacSha512 = from(HkdfMacFactory.Default.hmacSha512());
+        }
+        return hkdfHmacSha512;
+    }
+
+    /**
+     * Create a new HKDF instance for given macFactory.
+     *
+     * @param macFactory used for HKDF
+     * @return a new instance of HKDF
+     */
+    public static HKDF from(HkdfMacFactory macFactory) {
+        return new HKDF(macFactory);
+    }
+
+    /**
+     * <strong>Step 1 of RFC 5869 (Section 2.2)</strong>
      * <p>
-     * Uses Hmac with Sha256.
+     * The first stage takes the input keying material and "extracts" from it a fixed-length pseudorandom
+     * key K. The goal of the "extract" stage is to "concentrate" and provide a more uniformly unbiased and higher entropy but smaller output.
+     * This is done by utilising the diffusion properties of cryptographic MACs.
+     * <p>
+     * <strong>About Salts (from RFC 5869):</strong>
+     *
+     * <blockquote>
+     * HKDF is defined to operate with and without random salt.  This is
+     * done to accommodate applications where a salt value is not available.
+     * We stress, however, that the use of salt adds significantly to the
+     * strength of HKDF, ensuring independence between different uses of the
+     * hash function, supporting "source-independent" extraction, and
+     * strengthening the analytical results that back the HKDF design.
+     * </blockquote>
      *
      * @param inputKeyingMaterial data to be extracted (IKM)
      * @param salt                optional salt value (a non-secret random value);
      *                            if not provided, it is set to a array of hash length of zeros.
      * @return a new byte array pseudorandom key (of hash length in bytes) (PRK) which can be used to expand
+     * @see <a href="https://tools.ietf.org/html/rfc5869#section-2.2">RFC 5869 Section 2.2</a>
      */
-    public static byte[] extractHmacSha256(byte[] inputKeyingMaterial, byte[] salt) {
-        return extract(HkdfMacFactory.Default.hmacSha256(), inputKeyingMaterial, salt);
+    public byte[] extract(byte[] inputKeyingMaterial, byte[] salt) {
+        return new Extractor(macFactory).execute(inputKeyingMaterial, salt);
     }
 
     /**
-     * The first stage takes the input keying material and "extracts" from it a fixed-length pseudorandom
-     * key K. The goal of the "extract" stage is to "concentrate" the possibly dispersed entropy of the input
-     * keying material into a short, but cryptographically strong, pseudorandom key.
+     * <strong>Step 1 of RFC 5869 (Section 2.3)</strong>
      * <p>
-     * Uses Hmac with Sha512.
-     *
-     * @param inputKeyingMaterial data to be extracted (IKM)
-     * @param salt                optional salt value (a non-secret random value);
-     *                            if not provided, it is set to a array of hash length of zeros.
-     * @return a new byte array pseudorandom key (of hash length in bytes) (PRK) which can be used to expand
-     */
-    public static byte[] extractHmacSha512(byte[] inputKeyingMaterial, byte[] salt) {
-        return extract(HkdfMacFactory.Default.hmacSha512(), inputKeyingMaterial, salt);
-    }
-
-    /**
-     * The first stage takes the input keying material and "extracts" from it a fixed-length pseudorandom
-     * key K. The goal of the "extract" stage is to "concentrate" the possibly dispersed entropy of the input
-     * keying material into a short, but cryptographically strong, pseudorandom key.
-     *
-     * @param macFactory          factory creating the used mac algorithm
-     * @param inputKeyingMaterial data to be extracted (IKM)
-     * @param salt                optional salt value (a non-secret random value);
-     *                            if not provided, it is set to a array of hash length of zeros.
-     * @return a new byte array pseudorandom key (of hash length in bytes) (PRK) which can be used to expand
-     */
-    public static byte[] extract(HkdfMacFactory macFactory, byte[] inputKeyingMaterial, byte[] salt) {
-        return new Extractor(macFactory).hkdfExtract(inputKeyingMaterial, salt);
-    }
-
-    /* ************************************************************************** EXPAND */
-
-    /**
-     * The second stage "expands" the pseudorandom key to the desired
-     * length; the number and lengths of the output keys depend on the
-     * specific cryptographic algorithms for which the keys are needed.
+     * To "expand" the generated output of an already reasonably random input such as an existing shared key into a larger
+     * cryptographically independent output, thereby producing multiple keys deterministically from that initial shared key,
+     * so that the same process may produce those same secret keys safely on multiple devices, as long as the same inputs
+     * are utilised.
      * <p>
-     * Uses Hmac with Sha256.
+     * <strong>About Info (from RFC 5869):</strong>
+     *
+     * <blockquote>
+     * While the 'info' value is optional in the definition of HKDF, it is
+     * often of great importance in applications.  Its main objective is to
+     * bind the derived key material to application- and context-specific
+     * information.  For example, 'info' may contain a protocol number,
+     * algorithm identifiers, user identities, etc.  In particular, it may
+     * prevent the derivation of the same keying material for different
+     * contexts (when the same input key material (IKM) is used in such
+     * different contexts).
+     * </blockquote>
      *
      * @param pseudoRandomKey a pseudorandom key of at least hmac hash length in bytes (usually, the output from the extract step)
      * @param info            optional context and application specific information; may be null
      * @param outLengthBytes  length of output keying material in bytes
      * @return new byte array of output keying material (OKM)
+     * @see <a href="https://tools.ietf.org/html/rfc5869#section-2.3">RFC 5869 Section 2.3</a>
      */
-    public static byte[] expandHmacSha256(byte[] pseudoRandomKey, byte[] info, int outLengthBytes) {
-        return expand(HkdfMacFactory.Default.hmacSha256(), pseudoRandomKey, info, outLengthBytes);
-    }
-
-    /**
-     * The second stage "expands" the pseudorandom key to the desired
-     * length; the number and lengths of the output keys depend on the
-     * specific cryptographic algorithms for which the keys are needed.
-     * <p>
-     * Uses Hmac with Sha512.
-     *
-     * @param pseudoRandomKey a pseudorandom key of at least hmac hash length in bytes (usually, the output from the extract step)
-     * @param info            optional context and application specific information; may be null
-     * @param outLengthBytes  length of output keying material in bytes
-     * @return new byte array of output keying material (OKM)
-     */
-    public static byte[] expandHmacSha512(byte[] pseudoRandomKey, byte[] info, int outLengthBytes) {
-        return expand(HkdfMacFactory.Default.hmacSha512(), pseudoRandomKey, info, outLengthBytes);
-    }
-
-    /**
-     * The second stage "expands" the pseudorandom key to the desired
-     * length; the number and lengths of the output keys depend on the
-     * specific cryptographic algorithms for which the keys are needed.
-     *
-     * @param macFactory      factory creating the used mac algorithm
-     * @param pseudoRandomKey a pseudorandom key of at least hmac hash length in bytes (usually, the output from the extract step)
-     * @param info            optional context and application specific information; may be null
-     * @param outLengthBytes  length of output keying material in bytes
-     * @return new byte array of output keying material (OKM)
-     */
-    public static byte[] expand(HkdfMacFactory macFactory, byte[] pseudoRandomKey, byte[] info, int outLengthBytes) {
-        return new Expander(macFactory).hkdfExpand(pseudoRandomKey, info, outLengthBytes);
-    }    
-    
-    /* ********************************************************************* EXTRACT & EXPAND */
-
-    /**
-     * Convenience method for extract &amp; expand in a single method.
-     * <p>
-     * Uses Hmac with Sha256.
-     *
-     * @param inputKeyingMaterial data to be extracted (IKM)
-     * @param saltExtract         optional salt value (a non-secret random value);
-     * @param infoExpand          optional context and application specific information; may be null
-     * @param outLengthByte       length of output keying material in bytes
-     * @return new byte array of output keying material (OKM)
-     */
-    public static byte[] hkdfSha256(byte[] inputKeyingMaterial, byte[] saltExtract, byte[] infoExpand, int outLengthByte) {
-        return hkdf(HkdfMacFactory.Default.hmacSha256(), inputKeyingMaterial, saltExtract, infoExpand, outLengthByte);
+    public byte[] expand(byte[] pseudoRandomKey, byte[] info, int outLengthBytes) {
+        return new Expander(macFactory).execute(pseudoRandomKey, info, outLengthBytes);
     }
 
     /**
      * Convenience method for extract &amp; expand in a single method
      *
-     * @param macFactory          factory creating the used mac algorithm
      * @param inputKeyingMaterial data to be extracted (IKM)
      * @param saltExtract         optional salt value (a non-secret random value);
      * @param infoExpand          optional context and application specific information; may be null
      * @param outLengthByte       length of output keying material in bytes
      * @return new byte array of output keying material (OKM)
      */
-    public static byte[] hkdf(HkdfMacFactory macFactory, byte[] inputKeyingMaterial, byte[] saltExtract, byte[] infoExpand, int outLengthByte) {
-        return new Expander(macFactory).hkdfExpand(new Extractor(macFactory).hkdfExtract(inputKeyingMaterial, saltExtract), infoExpand, outLengthByte);
+    public byte[] extractAndExpand(byte[] inputKeyingMaterial, byte[] saltExtract, byte[] infoExpand, int outLengthByte) {
+        return new Expander(macFactory).execute(new Extractor(macFactory).execute(inputKeyingMaterial, saltExtract), infoExpand, outLengthByte);
     }
-    
+
+    /**
+     * Get the used mac factory
+     *
+     * @return factory
+     */
+    HkdfMacFactory getMacFactory() {
+        return macFactory;
+    }
+
     /* ************************************************************************** IMPL */
 
     static final class Extractor {
@@ -174,7 +181,7 @@ public final class HKDF {
          *                            if not provided, it is set to a array of hash length of zeros.
          * @return a new byte array pseudorandom key (of hash length in bytes) (PRK) which can be used to expand
          */
-        byte[] hkdfExtract(byte[] inputKeyingMaterial, byte[] salt) {
+        byte[] execute(byte[] inputKeyingMaterial, byte[] salt) {
             if (salt == null || salt.length == 0) {
                 salt = new byte[macFactory.macHashLengthByte()];
             }
@@ -208,7 +215,7 @@ public final class HKDF {
          * @param outLengthBytes  length of output keying material in bytes (must be <= 255 * mac hash length)
          * @return new byte array of output keying material (OKM)
          */
-        byte[] hkdfExpand(byte[] pseudoRandomKey, byte[] info, int outLengthBytes) {
+        byte[] execute(byte[] pseudoRandomKey, byte[] info, int outLengthBytes) {
 
             if (outLengthBytes <= 0) {
                 throw new IllegalArgumentException("out length bytes must be at least 1");
