@@ -60,6 +60,17 @@ public class HKDFTest {
     }
 
     @Test
+    public void customHmac() throws Exception {
+        //don't use md5, this is just an example
+        HKDF hkdfMd5 = HKDF.from(new HkdfMacFactory.Default("HmacMD5", 16));
+
+        byte[] lowEntropyInput = new byte[]{0x62, 0x58, (byte) 0x84, 0x2C};
+        byte[] outputKeyingMaterial = hkdfMd5.extractAndExpand(lowEntropyInput, null, null, 32);
+
+        assertEquals(32, outputKeyingMaterial.length);
+    }
+
+    @Test
     public void checkLength() throws Exception {
         int[] counts = {1, 4, 7, 8, 16, 20, 24, 36, 48, 64, 69, 72, 96, 128, 256, 512};
         byte[] ikm;
@@ -74,7 +85,7 @@ public class HKDFTest {
             checkLength(HKDF.fromHmacSha512().extract(ikm, salt), 64);
             checkLength(HKDF.fromHmacSha512().extract(ikm, null), 64);
             checkLength(HKDF.from(HkdfMacFactory.Default.hmacSha1()).extract(ikm, salt), 20);
-            checkLength(HKDF.from(new HkdfMacFactory.Default("HmacMd5", 16)).extract(ikm, salt), 16);
+            checkLength(HKDF.from(new HkdfMacFactory.Default("HmacMD5", 16)).extract(ikm, salt), 16);
 
             assertFalse(Arrays.equals(HKDF.fromHmacSha256().extract(ikm, salt), HKDF.fromHmacSha512().extract(ikm, salt)));
             assertFalse(Arrays.equals(HKDF.fromHmacSha256().extract(ikm, salt), HKDF.from(HkdfMacFactory.Default.hmacSha1()).extract(ikm, salt)));
@@ -116,7 +127,7 @@ public class HKDFTest {
                 checkLength(HKDF.fromHmacSha512().expand(prk, info, lengthOut), lengthOut);
                 checkLength(HKDF.fromHmacSha512().expand(prk, null, lengthOut), lengthOut);
                 checkLength(HKDF.from(HkdfMacFactory.Default.hmacSha1()).expand(prk, info, lengthOut), lengthOut);
-                checkLength(HKDF.from(new HkdfMacFactory.Default("HmacMd5", 16)).expand(prk, info, lengthOut), lengthOut);
+                checkLength(HKDF.from(new HkdfMacFactory.Default("HmacMD5", 16)).expand(prk, info, lengthOut), lengthOut);
 
                 if (lengthOut > 4) {
                     assertFalse(Arrays.equals(HKDF.fromHmacSha256().expand(prk, info, lengthOut), HKDF.fromHmacSha512().expand(prk, info, lengthOut)));

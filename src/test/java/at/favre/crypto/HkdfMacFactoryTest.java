@@ -3,6 +3,7 @@ package at.favre.crypto;
 import org.junit.Test;
 
 import javax.crypto.Mac;
+import java.security.Security;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -20,12 +21,17 @@ public class HkdfMacFactoryTest {
 
     @Test
     public void hmacSha1() throws Exception {
-        testHmacFactory(new HkdfMacFactory.Default("HmacSha1", 20), 20);
+        testHmacFactory(new HkdfMacFactory.Default("HmacSHA1", 20), 20);
     }
 
     @Test
     public void hmacMd5() throws Exception {
-        testHmacFactory(new HkdfMacFactory.Default("HmacMd5", 16), 16);
+        testHmacFactory(new HkdfMacFactory.Default("HmacMD5", 16), 16);
+    }
+
+    @Test
+    public void customProvider() throws Exception {
+        testHmacFactory(new HkdfMacFactory.Default("HmacSHA1", 20, Security.getProvider("SunJCE")), 20);
     }
 
     @Test(expected = RuntimeException.class)

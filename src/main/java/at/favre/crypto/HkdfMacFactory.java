@@ -5,6 +5,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
+import java.security.Provider;
 
 /**
  * Factory class for creating {@link Mac} hashers
@@ -33,6 +34,7 @@ interface HkdfMacFactory {
     class Default implements HkdfMacFactory {
         private final String macAlgorithmName;
         private final int hashLengthBytes;
+        private final Provider provider;
 
         /**
          * Creates a factory creating HMAC with SHA-256
@@ -40,39 +42,67 @@ interface HkdfMacFactory {
          * @return factory
          */
         public static HkdfMacFactory hmacSha256() {
-            return new Default("HmacSHA256", 256 / 8);
+            return new Default("HmacSHA256", 256 / 8, null);
         }
 
         /**
          * Creates a factory creating HMAC with SHA-512
+         *
          * @return factory
          */
         public static HkdfMacFactory hmacSha512() {
-            return new Default("HmacSHA512", 512 / 8);
+            return new Default("HmacSHA512", 512 / 8, null);
         }
 
         /**
          * Creates a factory creating HMAC with SHA-1
-         * @deprecated sha1 with HMAC should be fine, but not recommended for new protocols
+         *
          * @return factory
+         * @deprecated sha1 with HMAC should be fine, but not recommended for new protocols; see https://crypto.stackexchange.com/questions/26510/why-is-hmac-sha1-still-considered-secure
          */
         @Deprecated
         public static HkdfMacFactory hmacSha1() {
-            return new Default("HmacSha1", 160 / 8);
+            return new Default("HmacSHA1", 160 / 8, null);
         }
 
+        /**
+         * Creates a mac factory
+         *
+         * @param macAlgorithmName as used by {@link Mac#getInstance(String)}
+         * @param hashLengthBytes  hash length size of used mac in bytes
+         */
         Default(String macAlgorithmName, int hashLengthBytes) {
+            this(macAlgorithmName, hashLengthBytes, null);
+        }
+
+        /**
+         * Creates a mac factory
+         *
+         * @param macAlgorithmName as used by {@link Mac#getInstance(String)}
+         * @param hashLengthBytes  hash length size of used mac in bytes
+         * @param provider         what security provider, see {@link Mac#getInstance(String, Provider)}; may be null to use default
+         */
+        Default(String macAlgorithmName, int hashLengthBytes, Provider provider) {
             this.macAlgorithmName = macAlgorithmName;
             this.hashLengthBytes = hashLengthBytes;
+            this.provider = provider;
         }
 
         @Override
         public Mac createMacInstance(byte[] key) {
             try {
                 SecretKey secretKey = new SecretKeySpec(key, macAlgorithmName);
-                Mac hmacHasher = Mac.getInstance(macAlgorithmName);
-                hmacHasher.init(secretKey);
-                return hmacHasher;
+
+                Mac hmacInstance;
+
+                if (provider == null) {
+                    hmacInstance = Mac.getInstance(macAlgorithmName);
+                } else {
+                    hmacInstance = Mac.getInstance(macAlgorithmName, provider);
+                }
+
+                hmacInstance.init(secretKey);
+                return hmacInstance;
             } catch (NoSuchAlgorithmException e) {
                 throw new IllegalStateException("defined mac algorithm was not found", e);
             } catch (Exception e) {

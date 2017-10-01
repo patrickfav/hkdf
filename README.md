@@ -53,6 +53,10 @@ cipher.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(expandedIv));
 yte[] encrypted = cipher.doFinal("my secret message".getBytes(StandardCharsets.UTF_8));
 ```
 
+### Using custom HMAC implementation
+
+
+
 ## Download
 
 The artifacts are deployed to [jcenter](https://bintray.com/bintray/jcenter) and [Maven Central](https://search.maven.org/).
