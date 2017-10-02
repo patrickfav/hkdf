@@ -6,7 +6,7 @@
 
     <groupId>at.favre.lib</groupId>
     <artifactId>hkdf</artifactId>
-    <version>0.2.0</version>
+    <version>0.2.1</version>
 
     <name>HKDF-RFC5869</name>
     <description>A standalone Java implementation of HMAC-based key derivation function (HKDF) defined in RFC 5869 first
