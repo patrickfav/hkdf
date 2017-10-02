@@ -52,12 +52,19 @@ public class HKDFTest {
 
         //Example boilerplate encrypting a simple string with created key/iv
         SecretKey key = new SecretKeySpec(expandedAesKey, "AES"); //AES-128 key
+        byte[] message = "my secret message".getBytes(StandardCharsets.UTF_8);
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
         cipher.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(expandedIv));
-        byte[] encrypted = cipher.doFinal("my secret message".getBytes(StandardCharsets.UTF_8));
+        byte[] encrypted = cipher.doFinal(message);
 
         assertNotNull(encrypted);
         assertTrue(encrypted.length > 0);
+
+        cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(expandedIv));
+        byte[] decrypted = cipher.doFinal(encrypted);
+
+        assertArrayEquals(message, decrypted);
+        assertFalse(Arrays.equals(encrypted, decrypted));
     }
 
     @Test
@@ -170,6 +177,21 @@ public class HKDFTest {
         checkLength(HKDF.from(HkdfMacFactory.Default.hmacSha1()).extractAndExpand(RandomUtils.nextBytes(16), RandomUtils.nextBytes(20), null, 80), 80);
         checkLength(HKDF.fromHmacSha256().extractAndExpand(RandomUtils.nextBytes(16), RandomUtils.nextBytes(32), null, 80), 80);
         checkLength(HKDF.fromHmacSha512().extractAndExpand(RandomUtils.nextBytes(250), RandomUtils.nextBytes(64), null, 80), 80);
+    }
+
+    @Test
+    public void testLongInputExpand() throws Exception {
+        byte[] longInput = RandomUtils.nextBytes(1024 * 1024); //1 MiB
+        checkLength(HKDF.fromHmacSha256().extract(longInput, null), 32);
+    }
+
+    @Test
+    public void testLongOutputExtract() throws Exception {
+        int outLengthSha512 = 255 * 64;
+        checkLength(HKDF.fromHmacSha512().expand(HKDF.fromHmacSha512().extract(new byte[16], null), null, outLengthSha512), outLengthSha512);
+
+        int outLengthSha256 = 255 * 32;
+        checkLength(HKDF.fromHmacSha256().expand(HKDF.fromHmacSha256().extract(new byte[16], null), null, outLengthSha256), outLengthSha256);
     }
 
     @Test

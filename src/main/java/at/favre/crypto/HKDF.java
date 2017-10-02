@@ -98,7 +98,7 @@ public final class HKDF {
      * @param inputKeyingMaterial data to be extracted (IKM)
      * @param salt                optional salt value (a non-secret random value);
      *                            if not provided, it is set to a array of hash length of zeros.
-     * @return a new byte array pseudorandom key (of hash length in bytes) (PRK) which can be used to expand
+     * @return a new byte array pseudo random key (of hash length in bytes) (PRK) which can be used to expand
      * @see <a href="https://tools.ietf.org/html/rfc5869#section-2.2">RFC 5869 Section 2.2</a>
      */
     public byte[] extract(byte[] inputKeyingMaterial, byte[] salt) {
@@ -125,7 +125,7 @@ public final class HKDF {
      * different contexts).
      * </blockquote>
      *
-     * @param pseudoRandomKey a pseudorandom key of at least hmac hash length in bytes (usually, the output from the extract step)
+     * @param pseudoRandomKey a pseudo random key of at least hmac hash length in bytes (usually, the output from the extract step)
      * @param info            optional context and application specific information; may be null
      * @param outLengthBytes  length of output keying material in bytes
      * @return new byte array of output keying material (OKM)
@@ -168,10 +168,6 @@ public final class HKDF {
 
         /**
          * Step 1 of RFC 5869
-         * <p>
-         * The first stage takes the input keying material and "extracts" from it a fixed-length pseudorandom
-         * key K. The goal of the "extract" stage is to "concentrate" the possibly dispersed entropy of the input
-         * keying material into a short, but cryptographically strong, pseudorandom key.
          *
          * @param inputKeyingMaterial data to be extracted (IKM)
          * @param salt                optional salt value (a non-secret random value);
@@ -202,10 +198,6 @@ public final class HKDF {
 
         /**
          * Step 2 of RFC 5869.
-         * <p>
-         * The second stage "expands" the pseudorandom key to the desired
-         * length; the number and lengths of the output keys depend on the
-         * specific cryptographic algorithms for which the keys are needed.
          *
          * @param pseudoRandomKey a pseudorandom key of at least hmac hash length in bytes (usually, the output from the extract step)
          * @param info            optional context and application specific information; may be null
