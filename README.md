@@ -4,7 +4,7 @@
 
 This is supposed to be a standalone, lightweight, simple to use, fully tested and stable implementation in Java. The code compiled with [Java 7](https://en.wikipedia.org/wiki/Java_version_history#Java_SE_7) to be compatible with most [_Android_](https://www.android.com/) versions as well as normal Java applications.
 
- [![GitHub release](https://img.shields.io/github/release/patrickfav/hkdf.svg)](https://github.com/patrickfav/hkdf/releases/latest)
+[![Download](https://api.bintray.com/packages/patrickfav/maven/hkdf/images/download.svg) ](https://bintray.com/patrickfav/maven/hkdf/_latestVersion)
 [![Build Status](https://travis-ci.org/patrickfav/hkdf.svg?branch=master)](https://travis-ci.org/patrickfav/hkdf)
 [![Javadocs](https://www.javadoc.io/badge/at.favre.lib/hkdf.svg)](https://www.javadoc.io/doc/at.favre.lib/hkdf)
 [![Coverage Status](https://coveralls.io/repos/github/patrickfav/hkdf/badge.svg?branch=master)](https://coveralls.io/github/patrickfav/hkdf?branch=master)
