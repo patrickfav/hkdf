@@ -35,3 +35,4 @@ Thumbs.db
 signing.properties
 keystore.jks
 ci-settings.xml
+secrets.tar
