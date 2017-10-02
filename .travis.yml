@@ -20,7 +20,7 @@ after_success:
 
 deploy:
   - provider: script
-    script: mvn deploy -X
+    script: mvn -s ci-settings.xml deploy -X
     skip_cleanup: true
     on:
       branch: master
