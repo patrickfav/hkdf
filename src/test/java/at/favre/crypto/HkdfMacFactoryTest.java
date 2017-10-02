@@ -36,16 +36,15 @@ public class HkdfMacFactoryTest {
 
     @Test(expected = RuntimeException.class)
     public void hmacInstanceNotExisting() throws Exception {
-        new HkdfMacFactory.Default("HmacNotExisting", 16).createMacInstance(new byte[16]);
+        new HkdfMacFactory.Default("HmacNotExisting", 16).createInstance(new byte[16]);
     }
 
     private void testHmacFactory(HkdfMacFactory macFactory, int refLength) {
-        Mac mac = macFactory.createMacInstance(new byte[refLength]);
+        Mac mac = macFactory.createInstance(new byte[refLength]);
         assertNotNull(mac);
 
         mac.update(new byte[]{0x76, (byte) 0x92, 0x0E, 0x5E, (byte) 0x85, (byte) 0xDB, (byte) 0xA7, (byte) 0x8F});
         byte[] hash = mac.doFinal();
         assertEquals(refLength, hash.length);
-        assertEquals(refLength, macFactory.macHashLengthByte());
     }
 }

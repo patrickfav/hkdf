@@ -19,14 +19,7 @@ interface HkdfMacFactory {
      * @param key the key used, must not be null
      * @return a new mac instance
      */
-    Mac createMacInstance(byte[] key);
-
-    /**
-     * The hash length size of used mac in bytes (e.g. HmacSha256 has a hash length size of 32)
-     *
-     * @return output hash byte size
-     */
-    int macHashLengthByte();
+    Mac createInstance(byte[] key);
 
     /**
      * Default implementation
@@ -89,7 +82,7 @@ interface HkdfMacFactory {
         }
 
         @Override
-        public Mac createMacInstance(byte[] key) {
+        public Mac createInstance(byte[] key) {
             try {
                 SecretKey secretKey = new SecretKeySpec(key, macAlgorithmName);
 
@@ -108,11 +101,6 @@ interface HkdfMacFactory {
             } catch (Exception e) {
                 throw new IllegalStateException("could not make hmac hasher in hkdf", e);
             }
-        }
-
-        @Override
-        public int macHashLengthByte() {
-            return hashLengthBytes;
         }
     }
 }

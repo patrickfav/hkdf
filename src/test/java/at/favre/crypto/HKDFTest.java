@@ -194,7 +194,7 @@ public class HKDFTest {
                         byte[] salt = RandomUtils.nextBytes(r.nextInt(32));
                         byte[] prk = hkdf.extract(ikm, salt);
 
-                        assertTrue(hkdf.getMacFactory().macHashLengthByte() == prk.length);
+                        assertTrue(hkdf.getMacFactory().createInstance(new byte[1]).getMacLength() == prk.length);
 
                         //System.out.println("[" + System.nanoTime() + "|" + Thread.currentThread().getName() + "] prk: " + Hex.encodeHexString(prk));
 

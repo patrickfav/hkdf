@@ -1,7 +1,7 @@
 package at.favre.crypto;
 
 import javax.crypto.Mac;
-import java.io.ByteArrayOutputStream;
+import java.nio.ByteBuffer;
 
 
 /**
@@ -180,14 +180,14 @@ public final class HKDF {
          */
         byte[] execute(byte[] inputKeyingMaterial, byte[] salt) {
             if (salt == null || salt.length == 0) {
-                salt = new byte[macFactory.macHashLengthByte()];
+                salt = new byte[macFactory.createInstance(new byte[1]).getMacLength()];
             }
 
             if (inputKeyingMaterial == null || inputKeyingMaterial.length <= 0) {
                 throw new IllegalArgumentException("provided inputKeyingMaterial must be at least of size 1 and not null");
             }
 
-            Mac mac = macFactory.createMacInstance(salt);
+            Mac mac = macFactory.createInstance(salt);
             mac.update(inputKeyingMaterial);
             return mac.doFinal();
         }
@@ -222,7 +222,7 @@ public final class HKDF {
                 throw new IllegalArgumentException("provided pseudoRandomKey must be at least of size 1 and not null");
             }
 
-            Mac hmacHasher = macFactory.createMacInstance(pseudoRandomKey);
+            Mac hmacHasher = macFactory.createInstance(pseudoRandomKey);
 
             if (info == null) {
                 info = new byte[0];
@@ -243,14 +243,15 @@ public final class HKDF {
 
             byte[] blockN = new byte[0];
 
-            int iterations = (int) Math.ceil(((double) outLengthBytes) / ((double) macFactory.macHashLengthByte()));
+            int iterations = (int) Math.ceil(((double) outLengthBytes) / ((double) hmacHasher.getMacLength()));
 
             if (iterations > 255) {
-                throw new IllegalArgumentException("out length must be maximal 255 * hash len");
+                throw new IllegalArgumentException("out length must be maximal 255 * hash-length; requested: " + outLengthBytes + " bytes");
             }
 
-            ByteArrayOutputStream stream = new ByteArrayOutputStream(outLengthBytes);
+            ByteBuffer buffer = ByteBuffer.allocate(outLengthBytes);
             int remainingBytes = outLengthBytes;
+            int stepSize;
 
             for (int i = 0; i < iterations; i++) {
                 hmacHasher.update(blockN);
@@ -259,13 +260,13 @@ public final class HKDF {
 
                 blockN = hmacHasher.doFinal();
 
-                int stepSize = Math.min(remainingBytes, blockN.length);
+                stepSize = Math.min(remainingBytes, blockN.length);
 
-                stream.write(blockN, 0, stepSize);
+                buffer.put(blockN, 0, stepSize);
                 remainingBytes -= stepSize;
             }
 
-            return stream.toByteArray();
+            return buffer.array();
         }
     }
 }
