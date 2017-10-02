@@ -12,6 +12,7 @@ env:
 before_install:
   - openssl aes-256-cbc -K $encrypted_901439c1b2d2_key -iv $encrypted_901439c1b2d2_iv -in keystore.jks.enc -out keystore.jks -d
   - openssl aes-256-cbc -K $encrypted_901439c1b2d2_key -iv $encrypted_901439c1b2d2_iv -in ci-settings.xml.enc -out ci-settings.xml -d
+
 script:
   - mvn clean install -X -Djarsigner.skip=false
 
