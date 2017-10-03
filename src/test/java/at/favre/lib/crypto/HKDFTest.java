@@ -70,7 +70,7 @@ public class HKDFTest {
     @Test
     public void customHmac() throws Exception {
         //don't use md5, this is just an example
-        HKDF hkdfMd5 = HKDF.from(new HkdfMacFactory.Default("HmacMD5", 16, Security.getProvider("SunJCE")));
+        HKDF hkdfMd5 = HKDF.from(new HkdfMacFactory.Default("HmacMD5", Security.getProvider("SunJCE")));
 
         byte[] lowEntropyInput = new byte[]{0x62, 0x58, (byte) 0x84, 0x2C};
         byte[] outputKeyingMaterial = hkdfMd5.extractAndExpand(null, lowEntropyInput, null, 32);
@@ -93,7 +93,7 @@ public class HKDFTest {
             checkLength(HKDF.fromHmacSha512().extract(salt, ikm), 64);
             checkLength(HKDF.fromHmacSha512().extract(null, ikm), 64);
             checkLength(HKDF.from(HkdfMacFactory.Default.hmacSha1()).extract(salt, ikm), 20);
-            checkLength(HKDF.from(new HkdfMacFactory.Default("HmacMD5", 16)).extract(ikm, salt), 16);
+            checkLength(HKDF.from(new HkdfMacFactory.Default("HmacMD5")).extract(ikm, salt), 16);
 
             assertFalse(Arrays.equals(HKDF.fromHmacSha256().extract(salt, ikm), HKDF.fromHmacSha512().extract(salt, ikm)));
             assertFalse(Arrays.equals(HKDF.fromHmacSha256().extract(salt, ikm), HKDF.from(HkdfMacFactory.Default.hmacSha1()).extract(salt, ikm)));
@@ -135,7 +135,7 @@ public class HKDFTest {
                 checkLength(HKDF.fromHmacSha512().expand(prk, info, lengthOut), lengthOut);
                 checkLength(HKDF.fromHmacSha512().expand(prk, null, lengthOut), lengthOut);
                 checkLength(HKDF.from(HkdfMacFactory.Default.hmacSha1()).expand(prk, info, lengthOut), lengthOut);
-                checkLength(HKDF.from(new HkdfMacFactory.Default("HmacMD5", 16)).expand(prk, info, lengthOut), lengthOut);
+                checkLength(HKDF.from(new HkdfMacFactory.Default("HmacMD5")).expand(prk, info, lengthOut), lengthOut);
 
                 if (lengthOut > 4) {
                     assertFalse(Arrays.equals(HKDF.fromHmacSha256().expand(prk, info, lengthOut), HKDF.fromHmacSha512().expand(prk, info, lengthOut)));

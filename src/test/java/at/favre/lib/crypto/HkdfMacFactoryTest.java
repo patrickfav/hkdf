@@ -21,22 +21,22 @@ public class HkdfMacFactoryTest {
 
     @Test
     public void hmacSha1() throws Exception {
-        testHmacFactory(new HkdfMacFactory.Default("HmacSHA1", 20), 20);
+        testHmacFactory(new HkdfMacFactory.Default("HmacSHA1", null), 20);
     }
 
     @Test
     public void hmacMd5() throws Exception {
-        testHmacFactory(new HkdfMacFactory.Default("HmacMD5", 16), 16);
+        testHmacFactory(new HkdfMacFactory.Default("HmacMD5"), 16);
     }
 
     @Test
     public void customProvider() throws Exception {
-        testHmacFactory(new HkdfMacFactory.Default("HmacSHA1", 20, Security.getProvider("SunJCE")), 20);
+        testHmacFactory(new HkdfMacFactory.Default("HmacSHA1", Security.getProvider("SunJCE")), 20);
     }
 
     @Test(expected = RuntimeException.class)
     public void hmacInstanceNotExisting() throws Exception {
-        new HkdfMacFactory.Default("HmacNotExisting", 16).createInstance(new byte[16]);
+        new HkdfMacFactory.Default("HmacNotExisting", null).createInstance(new byte[16]);
     }
 
     private void testHmacFactory(HkdfMacFactory macFactory, int refLength) {

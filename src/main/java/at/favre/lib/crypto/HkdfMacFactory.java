@@ -26,7 +26,6 @@ interface HkdfMacFactory {
      */
     final class Default implements HkdfMacFactory {
         private final String macAlgorithmName;
-        private final int hashLengthBytes;
         private final Provider provider;
 
         /**
@@ -35,7 +34,7 @@ interface HkdfMacFactory {
          * @return factory
          */
         public static HkdfMacFactory hmacSha256() {
-            return new Default("HmacSHA256", 256 / 8, null);
+            return new Default("HmacSHA256", null);
         }
 
         /**
@@ -44,7 +43,7 @@ interface HkdfMacFactory {
          * @return factory
          */
         public static HkdfMacFactory hmacSha512() {
-            return new Default("HmacSHA512", 512 / 8, null);
+            return new Default("HmacSHA512", null);
         }
 
         /**
@@ -55,29 +54,26 @@ interface HkdfMacFactory {
          */
         @Deprecated
         public static HkdfMacFactory hmacSha1() {
-            return new Default("HmacSHA1", 160 / 8, null);
+            return new Default("HmacSHA1", null);
         }
 
         /**
          * Creates a mac factory
          *
          * @param macAlgorithmName as used by {@link Mac#getInstance(String)}
-         * @param hashLengthBytes  hash length size of used mac in bytes
          */
-        public Default(String macAlgorithmName, int hashLengthBytes) {
-            this(macAlgorithmName, hashLengthBytes, null);
+        public Default(String macAlgorithmName) {
+            this(macAlgorithmName, null);
         }
 
         /**
          * Creates a mac factory
          *
          * @param macAlgorithmName as used by {@link Mac#getInstance(String)}
-         * @param hashLengthBytes  hash length size of used mac in bytes
          * @param provider         what security provider, see {@link Mac#getInstance(String, Provider)}; may be null to use default
          */
-        public Default(String macAlgorithmName, int hashLengthBytes, Provider provider) {
+        public Default(String macAlgorithmName, Provider provider) {
             this.macAlgorithmName = macAlgorithmName;
-            this.hashLengthBytes = hashLengthBytes;
             this.provider = provider;
         }
 
