@@ -21,7 +21,7 @@ public class HkdfMacFactoryTest {
 
     @Test
     public void hmacSha1() throws Exception {
-        testHmacFactory(new HkdfMacFactory.Default("HmacSHA1", null), 20);
+        testHmacFactory(HkdfMacFactory.Default.hmacSha1(), 20);
     }
 
     @Test
@@ -37,6 +37,11 @@ public class HkdfMacFactoryTest {
     @Test(expected = RuntimeException.class)
     public void hmacInstanceNotExisting() throws Exception {
         new HkdfMacFactory.Default("HmacNotExisting", null).createInstance(new byte[16]);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void hmacUsingEmptyKey() throws Exception {
+        HkdfMacFactory.Default.hmacSha256().createInstance(new byte[0]);
     }
 
     private void testHmacFactory(HkdfMacFactory macFactory, int refLength) {
