@@ -14,6 +14,7 @@
         described by Hugo Krawczyk. It is special as it supports 2 Phases: Extract and Expand.
     </description>
     <url>https://github.com/patrickfav/hkdf</url>
+    <inceptionYear>2017</inceptionYear>
 
     <prerequisites>
         <maven>3.1.0</maven>
