@@ -22,7 +22,7 @@ Add dependency to your `pom.xml`:
 A very simple example:
 
 ```java
-byte[] pseudoRandomKey = HKDF.fromHmacSha256().extract(lowEntropyInput, null);
+byte[] pseudoRandomKey = HKDF.fromHmacSha256().extract(null, lowEntropyInput);
 byte[] outputKeyingMaterial = HKDF.fromHmacSha256().expand(pseudoRandomKey, null, 64);
 ```
 
@@ -41,7 +41,7 @@ String userInput = "this is a user input with bad entropy";
 HKDF hkdf = HKDF.fromHmacSha256();
 
 //extract the "raw" data to create output with concentrated entropy
-byte[] pseudoRandomKey = hkdf.extract(userInput.getBytes(StandardCharsets.UTF_8), staticSalt32Byte);
+byte[] pseudoRandomKey = hkdf.extract(staticSalt32Byte, userInput.getBytes(StandardCharsets.UTF_8));
 
 //create expanded bytes for e.g. AES secret key and IV
 byte[] expandedAesKey = hkdf.expand(pseudoRandomKey, "aes-key".getBytes(StandardCharsets.UTF_8), 16);
@@ -61,7 +61,7 @@ byte[] encrypted = cipher.doFinal("my secret message".getBytes(StandardCharsets.
 HKDF hkdfMd5 = HKDF.from(new HkdfMacFactory.Default("HmacMD5", 16, Security.getProvider("SunJCE")));
 
 byte[] lowEntropyInput = new byte[]{0x62, 0x58, (byte) 0x84, 0x2C};
-byte[] outputKeyingMaterial = hkdfMd5.extractAndExpand(lowEntropyInput, null, null, 32);
+byte[] outputKeyingMaterial = hkdfMd5.extractAndExpand(null, lowEntropyInput null, 32);
 ```
 
 ## Download
