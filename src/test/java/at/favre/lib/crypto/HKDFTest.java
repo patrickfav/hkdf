@@ -1,4 +1,4 @@
-package at.favre.crypto;
+package at.favre.lib.crypto;
 
 import org.apache.commons.lang3.RandomUtils;
 import org.junit.Before;

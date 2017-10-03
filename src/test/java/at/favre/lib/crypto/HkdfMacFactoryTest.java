@@ -1,4 +1,4 @@
-package at.favre.crypto;
+package at.favre.lib.crypto;
 
 import org.junit.Test;
 

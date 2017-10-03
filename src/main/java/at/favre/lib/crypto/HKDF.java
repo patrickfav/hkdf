@@ -1,4 +1,4 @@
-package at.favre.crypto;
+package at.favre.lib.crypto;
 
 import javax.crypto.Mac;
 import java.nio.ByteBuffer;

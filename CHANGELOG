@@ -1,8 +1,9 @@
 # Releases
 
-## v1.0.0
+## v0.3.0
 
 * refactor 'expand' byte handling to use byte buffer
+* rename package to `at.favre.lib.crypto`
 
 
 ## v0.2.1
