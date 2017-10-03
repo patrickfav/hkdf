@@ -148,8 +148,8 @@ public class RFC5869TestCases {
     }
 
     private void checkStep1(HkdfMacFactory macFactory, String ikm, String salt, String prk) throws Exception {
-        byte[] currentPrk = HKDF.from(macFactory).extract(Hex.decodeHex(ikm.toCharArray()),
-                Hex.decodeHex(salt.toCharArray()));
+        byte[] currentPrk = HKDF.from(macFactory).extract(Hex.decodeHex(salt.toCharArray()),
+                Hex.decodeHex(ikm.toCharArray()));
         assertArrayEquals(Hex.decodeHex(prk.toCharArray()), currentPrk);
     }
 

@@ -34,7 +34,7 @@ public class HKDFBenchmarkTest {
             //benchmark different input sizes
             for (int j = 1024; j < 1024 * 1024; j += 1024) {
                 input = RandomUtils.nextBytes(j);
-                byte[] pseudoRandomKey = HKDF.fromHmacSha256().extract(input, new byte[]{0x62, 0x58, (byte) 0x84, 0x2C});
+                byte[] pseudoRandomKey = HKDF.fromHmacSha256().extract(new byte[]{0x62, 0x58, (byte) 0x84, 0x2C}, input);
                 byte[] outputKeyingMaterial = HKDF.fromHmacSha256().expand(pseudoRandomKey, null, 32);
                 assertTrue(outputKeyingMaterial.length > 0);
                 count++;
@@ -43,7 +43,7 @@ public class HKDFBenchmarkTest {
             //benchmark different input sizes
             for (int j = 16; j < 255 * 64; j += 16) {
                 input = RandomUtils.nextBytes(128);
-                byte[] pseudoRandomKey = HKDF.fromHmacSha512().extract(input, new byte[]{0x62, 0x58, (byte) 0x84, 0x2C});
+                byte[] pseudoRandomKey = HKDF.fromHmacSha512().extract(new byte[]{0x62, 0x58, (byte) 0x84, 0x2C}, input);
                 byte[] outputKeyingMaterial = HKDF.fromHmacSha512().expand(pseudoRandomKey, null, j);
                 assertTrue(outputKeyingMaterial.length > 0);
                 count++;

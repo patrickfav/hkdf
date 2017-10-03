@@ -20,7 +20,7 @@ import java.nio.ByteBuffer;
  * <p>
  * Simple Example:
  * <pre>
- *     byte[] pseudoRandomKey = HKDF.fromHmacSha256().extract(lowEntropyInput, null);
+ *     byte[] pseudoRandomKey = HKDF.fromHmacSha256().extract(null, lowEntropyInput);
  *     byte[] outputKeyingMaterial = HKDF.fromHmacSha256().expand(pseudoRandomKey, null, 64);
  * </pre>
  *
@@ -95,14 +95,14 @@ public final class HKDF {
      * strengthening the analytical results that back the HKDF design.
      * </blockquote>
      *
-     * @param inputKeyingMaterial data to be extracted (IKM)
      * @param salt                optional salt value (a non-secret random value);
+     * @param inputKeyingMaterial data to be extracted (IKM)
      *                            if not provided, it is set to a array of hash length of zeros.
      * @return a new byte array pseudo random key (of hash length in bytes) (PRK) which can be used to expand
      * @see <a href="https://tools.ietf.org/html/rfc5869#section-2.2">RFC 5869 Section 2.2</a>
      */
-    public byte[] extract(byte[] inputKeyingMaterial, byte[] salt) {
-        return new Extractor(macFactory).execute(inputKeyingMaterial, salt);
+    public byte[] extract(byte[] salt, byte[] inputKeyingMaterial) {
+        return new Extractor(macFactory).execute(salt, inputKeyingMaterial);
     }
 
     /**
@@ -138,14 +138,14 @@ public final class HKDF {
     /**
      * Convenience method for extract &amp; expand in a single method
      *
-     * @param inputKeyingMaterial data to be extracted (IKM)
      * @param saltExtract         optional salt value (a non-secret random value);
+     * @param inputKeyingMaterial data to be extracted (IKM)
      * @param infoExpand          optional context and application specific information; may be null
      * @param outLengthByte       length of output keying material in bytes
      * @return new byte array of output keying material (OKM)
      */
-    public byte[] extractAndExpand(byte[] inputKeyingMaterial, byte[] saltExtract, byte[] infoExpand, int outLengthByte) {
-        return new Expander(macFactory).execute(new Extractor(macFactory).execute(inputKeyingMaterial, saltExtract), infoExpand, outLengthByte);
+    public byte[] extractAndExpand(byte[] saltExtract, byte[] inputKeyingMaterial, byte[] infoExpand, int outLengthByte) {
+        return new Expander(macFactory).execute(new Extractor(macFactory).execute(saltExtract, inputKeyingMaterial), infoExpand, outLengthByte);
     }
 
     /**
@@ -169,12 +169,12 @@ public final class HKDF {
         /**
          * Step 1 of RFC 5869
          *
-         * @param inputKeyingMaterial data to be extracted (IKM)
          * @param salt                optional salt value (a non-secret random value);
+         * @param inputKeyingMaterial data to be extracted (IKM)
          *                            if not provided, it is set to a array of hash length of zeros.
          * @return a new byte array pseudorandom key (of hash length in bytes) (PRK) which can be used to expand
          */
-        byte[] execute(byte[] inputKeyingMaterial, byte[] salt) {
+        byte[] execute(byte[] salt, byte[] inputKeyingMaterial) {
             if (salt == null || salt.length == 0) {
                 salt = new byte[macFactory.createInstance(new byte[1]).getMacLength()];
             }

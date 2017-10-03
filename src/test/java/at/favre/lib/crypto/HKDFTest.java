@@ -27,7 +27,7 @@ public class HKDFTest {
     public void quickStarTest() throws Exception {
         byte[] lowEntropyInput = new byte[]{0x62, 0x58, (byte) 0x84, 0x2C};
 
-        byte[] pseudoRandomKey = HKDF.fromHmacSha256().extract(lowEntropyInput, null);
+        byte[] pseudoRandomKey = HKDF.fromHmacSha256().extract(null, lowEntropyInput);
         byte[] outputKeyingMaterial = HKDF.fromHmacSha256().expand(pseudoRandomKey, null, 64);
 
         assertEquals(64, outputKeyingMaterial.length);
@@ -44,7 +44,7 @@ public class HKDFTest {
         HKDF hkdf = HKDF.fromHmacSha256();
 
         //extract the "raw" data to create output with concentrated entropy
-        byte[] pseudoRandomKey = hkdf.extract(userInput.getBytes(StandardCharsets.UTF_8), staticSalt32Byte);
+        byte[] pseudoRandomKey = hkdf.extract(staticSalt32Byte, userInput.getBytes(StandardCharsets.UTF_8));
 
         //create expanded bytes for e.g. AES secret key and IV
         byte[] expandedAesKey = hkdf.expand(pseudoRandomKey, "aes-key".getBytes(StandardCharsets.UTF_8), 16);
@@ -73,7 +73,7 @@ public class HKDFTest {
         HKDF hkdfMd5 = HKDF.from(new HkdfMacFactory.Default("HmacMD5", 16, Security.getProvider("SunJCE")));
 
         byte[] lowEntropyInput = new byte[]{0x62, 0x58, (byte) 0x84, 0x2C};
-        byte[] outputKeyingMaterial = hkdfMd5.extractAndExpand(lowEntropyInput, null, null, 32);
+        byte[] outputKeyingMaterial = hkdfMd5.extractAndExpand(null, lowEntropyInput, null, 32);
 
         assertEquals(32, outputKeyingMaterial.length);
     }
@@ -87,16 +87,16 @@ public class HKDFTest {
         for (int i : counts) {
             ikm = RandomUtils.nextBytes(i);
             salt = RandomUtils.nextBytes(i * 2);
-            checkLength(HKDF.fromHmacSha256().extract(ikm, salt), 32);
-            checkLength(HKDF.fromHmacSha256().extract(ikm, null), 32);
-            checkLength(HKDF.fromHmacSha256().extract(ikm, new byte[0]), 32);
-            checkLength(HKDF.fromHmacSha512().extract(ikm, salt), 64);
-            checkLength(HKDF.fromHmacSha512().extract(ikm, null), 64);
-            checkLength(HKDF.from(HkdfMacFactory.Default.hmacSha1()).extract(ikm, salt), 20);
+            checkLength(HKDF.fromHmacSha256().extract(salt, ikm), 32);
+            checkLength(HKDF.fromHmacSha256().extract(null, ikm), 32);
+            checkLength(HKDF.fromHmacSha256().extract(new byte[0], ikm), 32);
+            checkLength(HKDF.fromHmacSha512().extract(salt, ikm), 64);
+            checkLength(HKDF.fromHmacSha512().extract(null, ikm), 64);
+            checkLength(HKDF.from(HkdfMacFactory.Default.hmacSha1()).extract(salt, ikm), 20);
             checkLength(HKDF.from(new HkdfMacFactory.Default("HmacMD5", 16)).extract(ikm, salt), 16);
 
-            assertFalse(Arrays.equals(HKDF.fromHmacSha256().extract(ikm, salt), HKDF.fromHmacSha512().extract(ikm, salt)));
-            assertFalse(Arrays.equals(HKDF.fromHmacSha256().extract(ikm, salt), HKDF.from(HkdfMacFactory.Default.hmacSha1()).extract(ikm, salt)));
+            assertFalse(Arrays.equals(HKDF.fromHmacSha256().extract(salt, ikm), HKDF.fromHmacSha512().extract(salt, ikm)));
+            assertFalse(Arrays.equals(HKDF.fromHmacSha256().extract(salt, ikm), HKDF.from(HkdfMacFactory.Default.hmacSha1()).extract(salt, ikm)));
         }
     }
 
@@ -107,13 +107,13 @@ public class HKDFTest {
     @Test
     public void testExtractFailures() throws Exception {
         try {
-            HKDF.fromHmacSha256().extract(null, RandomUtils.nextBytes(10));
+            HKDF.fromHmacSha256().extract(RandomUtils.nextBytes(10), null);
             fail();
         } catch (Exception ignored) {
         }
 
         try {
-            HKDF.fromHmacSha512().extract(new byte[0], null);
+            HKDF.fromHmacSha512().extract(null, new byte[0]);
             fail();
         } catch (Exception ignored) {
         }
@@ -174,24 +174,24 @@ public class HKDFTest {
 
     @Test
     public void extractAndExpand() throws Exception {
-        checkLength(HKDF.from(HkdfMacFactory.Default.hmacSha1()).extractAndExpand(RandomUtils.nextBytes(16), RandomUtils.nextBytes(20), null, 80), 80);
-        checkLength(HKDF.fromHmacSha256().extractAndExpand(RandomUtils.nextBytes(16), RandomUtils.nextBytes(32), null, 80), 80);
-        checkLength(HKDF.fromHmacSha512().extractAndExpand(RandomUtils.nextBytes(250), RandomUtils.nextBytes(64), null, 80), 80);
+        checkLength(HKDF.from(HkdfMacFactory.Default.hmacSha1()).extractAndExpand(RandomUtils.nextBytes(20), RandomUtils.nextBytes(16), null, 80), 80);
+        checkLength(HKDF.fromHmacSha256().extractAndExpand(RandomUtils.nextBytes(32), RandomUtils.nextBytes(16), null, 80), 80);
+        checkLength(HKDF.fromHmacSha512().extractAndExpand(RandomUtils.nextBytes(64), RandomUtils.nextBytes(250), null, 80), 80);
     }
 
     @Test
     public void testLongInputExpand() throws Exception {
         byte[] longInput = RandomUtils.nextBytes(1024 * 1024); //1 MiB
-        checkLength(HKDF.fromHmacSha256().extract(longInput, null), 32);
+        checkLength(HKDF.fromHmacSha256().extract(null, longInput), 32);
     }
 
     @Test
     public void testLongOutputExtract() throws Exception {
         int outLengthSha512 = 255 * 64;
-        checkLength(HKDF.fromHmacSha512().expand(HKDF.fromHmacSha512().extract(new byte[16], null), null, outLengthSha512), outLengthSha512);
+        checkLength(HKDF.fromHmacSha512().expand(HKDF.fromHmacSha512().extract(null, new byte[16]), null, outLengthSha512), outLengthSha512);
 
         int outLengthSha256 = 255 * 32;
-        checkLength(HKDF.fromHmacSha256().expand(HKDF.fromHmacSha256().extract(new byte[16], null), null, outLengthSha256), outLengthSha256);
+        checkLength(HKDF.fromHmacSha256().expand(HKDF.fromHmacSha256().extract(null, new byte[16]), null, outLengthSha256), outLengthSha256);
     }
 
     @Test
@@ -214,7 +214,7 @@ public class HKDFTest {
 
                         byte[] ikm = RandomUtils.nextBytes(r.nextInt(12) + 12);
                         byte[] salt = RandomUtils.nextBytes(r.nextInt(32));
-                        byte[] prk = hkdf.extract(ikm, salt);
+                        byte[] prk = hkdf.extract(salt, ikm);
 
                         assertTrue(hkdf.getMacFactory().createInstance(new byte[1]).getMacLength() == prk.length);
 
