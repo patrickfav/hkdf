@@ -1,5 +1,10 @@
 # Releases
 
+
+## v0.4.1
+
+* some small bugfixes
+
 ## v0.4.0
 
 * change api from `extract(ikm,salt)` to a more RFC compliant `extract(salt,ikm)` (also `extractAndExpand()`)
