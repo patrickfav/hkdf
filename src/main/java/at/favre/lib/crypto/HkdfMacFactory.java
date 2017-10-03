@@ -10,7 +10,7 @@ import java.security.Provider;
 /**
  * Factory class for creating {@link Mac} hashers
  */
-interface HkdfMacFactory {
+public interface HkdfMacFactory {
 
     /**
      * Creates a new instance of Hmac with given key, i.e. it must already be initialized
