@@ -2,12 +2,12 @@
 
 [Hashed Message Authentication Code](https://en.wikipedia.org/wiki/Hash-based_message_authentication_code) (HMAC)-based key derivation function ([HKDF](https://en.wikipedia.org/wiki/HKDF)), can be used as a building block in various protocols and applications.  The [key derivation function](https://en.wikipedia.org/wiki/Key_derivation_function) (KDF) is intended to support a wide range of applications and requirements, and is conservative in its use of [cryptographic hash functions](https://en.wikipedia.org/wiki/Cryptographic_hash_function). It is likely to have [better security properties](https://crypto.stackexchange.com/questions/13232/how-is-hkdf-expand-better-than-a-simple-hash) than KDF's based on just a hash functions alone. See [RFC 5869](https://tools.ietf.org/html/rfc5869) for full detail.
 
-This is supposed to be a standalone, lightweight, simple to use, fully tested and stable implementation in Java. The code is compiled with [Java 7](https://en.wikipedia.org/wiki/Java_version_history#Java_SE_7) to be compatible with most [_Android_](https://www.android.com/) versions as well as normal Java applications.
-
 [![Download](https://api.bintray.com/packages/patrickfav/maven/hkdf/images/download.svg)](https://bintray.com/patrickfav/maven/hkdf/_latestVersion)
 [![Build Status](https://travis-ci.org/patrickfav/hkdf.svg?branch=master)](https://travis-ci.org/patrickfav/hkdf)
 [![Javadocs](https://www.javadoc.io/badge/at.favre.lib/hkdf.svg)](https://www.javadoc.io/doc/at.favre.lib/hkdf)
 [![Coverage Status](https://coveralls.io/repos/github/patrickfav/hkdf/badge.svg?branch=master)](https://coveralls.io/github/patrickfav/hkdf?branch=master)
+
+This is supposed to be a standalone, lightweight, simple to use, fully tested and stable implementation in Java. The code is compiled with [Java 7](https://en.wikipedia.org/wiki/Java_version_history#Java_SE_7) to be compatible with most [_Android_](https://www.android.com/) versions as well as normal Java applications.
 
 ## Quickstart
 

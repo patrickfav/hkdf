@@ -6,12 +6,12 @@
 
     <groupId>at.favre.lib</groupId>
     <artifactId>hkdf</artifactId>
-    <version>0.4.2</version>
+    <version>0.4.3</version>
     <packaging>jar</packaging>
 
     <name>HKDF-RFC5869</name>
     <description>A standalone Java implementation of HMAC-based key derivation function (HKDF) defined in RFC 5869 first
-        described by Hugo Krawczyk. It is special as it supports 2 Phases: Extract and Expand.
+        described by Hugo Krawczyk. HKDF follows the "extract-then-expand" paradigm.
     </description>
     <url>https://github.com/patrickfav/hkdf</url>
     <inceptionYear>2017</inceptionYear>
@@ -124,7 +124,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <skip>false</skip> <!-- set this to true if fail because of missing credentials -->
+                    <skip>true</skip> <!-- set this to true if fail because of missing credentials -->
                     <keystore>keystore.jks</keystore>
                     <alias>pfopensource</alias>
                     <storepass>${env.OPENSOURCE_PROJECTS_KS_PW}</storepass>
@@ -167,11 +167,13 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.6</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
             <version>1.10</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
     <developers>
