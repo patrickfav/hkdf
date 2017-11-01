@@ -1,5 +1,9 @@
 # Releases
 
+## v0.4.4
+
+* fix signed jar
+
 ## v0.4.3
 
 * remove obsolete maven dependencies
