@@ -6,7 +6,7 @@
 
     <groupId>at.favre.lib</groupId>
     <artifactId>hkdf</artifactId>
-    <version>0.4.4</version>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
 
     <name>HKDF-RFC5869</name>

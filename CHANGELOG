@@ -1,5 +1,9 @@
 # Releases
 
+## v1.0.0
+
+* add checkstyle rules
+
 ## v0.4.4
 
 * fix signed jar
