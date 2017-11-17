@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package at.favre.lib.crypto;
 
 import javax.crypto.Mac;
 import java.nio.ByteBuffer;
-
 
 /**
  * A standards-compliant implementation of RFC 5869
@@ -44,6 +44,7 @@ import java.nio.ByteBuffer;
  * The HKDF Scheme</a>
  * @see <a href="https://en.wikipedia.org/wiki/HKDF">Wikipedia: HKDF</a>
  */
+@SuppressWarnings("WeakerAccess")
 public final class HKDF {
     /**
      * Cache instances
