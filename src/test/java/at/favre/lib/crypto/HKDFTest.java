@@ -1,5 +1,6 @@
 package at.favre.lib.crypto;
 
+import at.favre.lib.bytes.Bytes;
 import org.apache.commons.lang3.RandomUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -118,6 +119,24 @@ public class HKDFTest {
             fail();
         } catch (Exception ignored) {
         }
+    }
+
+    @Test
+    public void testSmallArrayInput() throws Exception {
+        byte[] b1 = HKDF.fromHmacSha256().extractAndExpand(new byte[16], new byte[]{1}, "smth".getBytes(), 64);
+        byte[] b2 = HKDF.fromHmacSha256().extractAndExpand(new byte[16], new byte[]{1}, "smth".getBytes(), 64);
+        byte[] b3 = HKDF.fromHmacSha256().extractAndExpand(new byte[16], new byte[1], "smth".getBytes(), 64);
+        byte[] b4 = HKDF.fromHmacSha256().extractAndExpand(new byte[16], new byte[2], "smth".getBytes(), 64);
+
+        assertArrayEquals(b1, b2);
+        assertFalse(Arrays.equals(b1, b3));
+        assertFalse(Arrays.equals(b1, b4));
+        assertFalse(Arrays.equals(b3, b4));
+
+        System.out.println(Bytes.wrap(b1).encodeHex());
+        System.out.println(Bytes.wrap(b2).encodeHex());
+        System.out.println(Bytes.wrap(b3).encodeHex());
+        System.out.println(Bytes.wrap(b4).encodeHex());
     }
 
     @Test
