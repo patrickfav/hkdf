@@ -200,8 +200,7 @@ public final class HKDF {
             }
 
             Mac mac = macFactory.createInstance(salt);
-            mac.update(inputKeyingMaterial);
-            return mac.doFinal();
+            return mac.doFinal(inputKeyingMaterial);
         }
     }
 
