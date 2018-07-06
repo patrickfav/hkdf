@@ -3,6 +3,7 @@
 ## v1.0.1
 
 * update maven plugins and test dependencies
+* switch to maven wrapper
 
 ## v1.0.0
 
