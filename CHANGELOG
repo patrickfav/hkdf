@@ -1,5 +1,9 @@
 # Releases
 
+## v1.0.1
+
+* update maven plugins and test dependencies
+
 ## v1.0.0
 
 * add checkstyle rules
