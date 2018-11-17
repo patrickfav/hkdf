@@ -5,7 +5,7 @@
 [![Download](https://api.bintray.com/packages/patrickfav/maven/hkdf/images/download.svg)](https://bintray.com/patrickfav/maven/hkdf/_latestVersion)
 [![Build Status](https://travis-ci.org/patrickfav/hkdf.svg?branch=master)](https://travis-ci.org/patrickfav/hkdf)
 [![Javadocs](https://www.javadoc.io/badge/at.favre.lib/hkdf.svg)](https://www.javadoc.io/doc/at.favre.lib/hkdf)
-[![Coverage Status](https://coveralls.io/repos/github/patrickfav/hkdf/badge.svg?branch=master)](https://coveralls.io/github/patrickfav/hkdf?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/patrickfav/hkdf/badge.svg?branch=master)](https://coveralls.io/github/patrickfav/hkdf?branch=master) [![Maintainability](https://api.codeclimate.com/v1/badges/fc50d911e4146a570d4e/maintainability)](https://codeclimate.com/github/patrickfav/hkdf/maintainability)
 
 This is supposed to be a standalone, lightweight, simple to use, fully tested and stable implementation in Java. The code is compiled with target [Java 7](https://en.wikipedia.org/wiki/Java_version_history#Java_SE_7) to be compatible with most [_Android_](https://www.android.com/) versions as well as normal Java applications. It passes all test vectors from [RFC 5869 Appendix A.](https://tools.ietf.org/html/rfc5869#appendix-A)
 
@@ -163,13 +163,13 @@ If you want to skip jar signing just change the skip configuration in the
 
 ### Build with Maven
 
-Use maven (3.1+) to create a jar including all dependencies
+Use the Maven wrapper to create a jar including all dependencies
 
-    mvn clean install
+    mvnw clean install
 
 ## Tech Stack
 
-* Java 7
+* Java 7 (+ [errorprone](https://github.com/google/error-prone) static analyzer)
 * Maven
 
 ## HKDF Implementations in Java
