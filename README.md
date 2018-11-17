@@ -1,4 +1,4 @@
-# HKDF
+# HMAC-based Key Derivation Function (HKDF) RFC 5869
 
 [Hashed Message Authentication Code](https://en.wikipedia.org/wiki/Hash-based_message_authentication_code) (HMAC)-based key derivation function ([HKDF](https://en.wikipedia.org/wiki/HKDF)), can be used as a building block in various protocols and applications.  The [key derivation function](https://en.wikipedia.org/wiki/Key_derivation_function) (KDF) is intended to support a wide range of applications and requirements, and is conservative in its use of [cryptographic hash functions](https://en.wikipedia.org/wiki/Cryptographic_hash_function). It is likely to have [better security properties](https://crypto.stackexchange.com/questions/13232/how-is-hkdf-expand-better-than-a-simple-hash) than KDF's based on just a hash functions alone. See [RFC 5869](https://tools.ietf.org/html/rfc5869) for full detail. HKDF specifies a version of the [NIST Special Publication 800-56C](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-56Cr1.pdf) "Two-Step Key Derivation" scheme.
 

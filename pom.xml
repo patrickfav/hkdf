@@ -11,7 +11,9 @@
 
     <name>HKDF-RFC5869</name>
     <description>A standalone Java implementation of HMAC-based key derivation function (HKDF) defined in RFC 5869 first
-        described by Hugo Krawczyk. HKDF follows the "extract-then-expand" paradigm.
+        described by Hugo Krawczyk. HKDF follows the "extract-then-expand" paradigm compatible with NIST Special
+        Publication 800-56C
+        "Two-Step Key Derivation" scheme.
     </description>
     <url>https://github.com/patrickfav/hkdf</url>
     <inceptionYear>2017</inceptionYear>
