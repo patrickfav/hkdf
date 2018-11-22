@@ -7,7 +7,7 @@
 [![Javadocs](https://www.javadoc.io/badge/at.favre.lib/hkdf.svg)](https://www.javadoc.io/doc/at.favre.lib/hkdf)
 [![Coverage Status](https://coveralls.io/repos/github/patrickfav/hkdf/badge.svg?branch=master)](https://coveralls.io/github/patrickfav/hkdf?branch=master) [![Maintainability](https://api.codeclimate.com/v1/badges/fc50d911e4146a570d4e/maintainability)](https://codeclimate.com/github/patrickfav/hkdf/maintainability)
 
-This is supposed to be a standalone, lightweight, simple to use, fully tested and stable implementation in Java. The code is compiled with target [Java 7](https://en.wikipedia.org/wiki/Java_version_history#Java_SE_7) to be compatible with most [_Android_](https://www.android.com/) versions as well as normal Java applications. It passes all test vectors from [RFC 5869 Appendix A.](https://tools.ietf.org/html/rfc5869#appendix-A)
+This is a standalone, lightweight, simple to use, fully tested and stable implementation in Java. The code is compiled with target [Java 7](https://en.wikipedia.org/wiki/Java_version_history#Java_SE_7) to be compatible with most [_Android_](https://www.android.com/) versions as well as normal Java applications. It passes all test vectors from [RFC 5869 Appendix A.](https://tools.ietf.org/html/rfc5869#appendix-A)
 
 ## Quickstart
 
@@ -28,20 +28,19 @@ byte[] outputKeyingMaterial = HKDF.fromHmacSha256().expand(pseudoRandomKey, null
 
 ### Full Example
 
-This example creates high-quality [AES](https://en.wikipedia.org/wiki/Advanced_Encryption_Standard) key and initialization vector from a bad
-user input and encrypts with [CBC](https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#CBC) block mode:
+This example creates a high-quality [AES](https://en.wikipedia.org/wiki/Advanced_Encryption_Standard) secret key and initialization vector from a shared secret calculated by a [key agreement](https://en.wikipedia.org/wiki/Key-agreement_protocol) protocol and encrypts with [CBC](https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#CBC) block mode:
 
 ```java
 //if no dynamic salt is available, a static salt is better than null
 byte[] staticSalt32Byte = new byte[]{(byte) 0xDA, (byte) 0xAC, 0x3E, 0x10, 0x55, (byte) 0xB5, (byte) 0xF1, 0x3E, 0x53, (byte) 0xE4, 0x70, (byte) 0xA8, 0x77, 0x79, (byte) 0x8E, 0x0A, (byte) 0x89, (byte) 0xAE, (byte) 0x96, 0x5F, 0x19, 0x5D, 0x53, 0x62, 0x58, (byte) 0x84, 0x2C, 0x09, (byte) 0xAD, 0x6E, 0x20, (byte) 0xD4};
 
 //example input
-String userInput = "this is a user input with bad entropy";
+byte[] sharedSecret = ...;
 
 HKDF hkdf = HKDF.fromHmacSha256();
 
 //extract the "raw" data to create output with concentrated entropy
-byte[] pseudoRandomKey = hkdf.extract(staticSalt32Byte, userInput.getBytes(StandardCharsets.UTF_8));
+byte[] pseudoRandomKey = hkdf.extract(staticSalt32Byte, sharedSecret);
 
 //create expanded bytes for e.g. AES secret key and IV
 byte[] expandedAesKey = hkdf.expand(pseudoRandomKey, "aes-key".getBytes(StandardCharsets.UTF_8), 16);
@@ -53,6 +52,8 @@ Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
 cipher.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(expandedIv));
 byte[] encrypted = cipher.doFinal("my secret message".getBytes(StandardCharsets.UTF_8));
 ```
+
+_Note_: HKDF is not suited for password-based key derivation, since it has no key stretching property. Use something like [PBKDF2](https://en.wikipedia.org/wiki/PBKDF2) or [bcrpyt](https://github.com/patrickfav/bcrypt) for that.
 
 ### Using custom HMAC implementation
 
@@ -107,7 +108,7 @@ Note that some existing KDF specifications, such as NIST Special Publication 800
 
 ### Use Cases
 
-HKDF is intended for use in a wide variety of KDF applications. Some applications _will not be able_ to use HKDF "as-is" due to specific operational requirements. One significant example is the derivation of cryptographic keys from a source of low entropy, such as a user's password. In the case of _password-based KDFs_, a main goal is to slow down dictionary attacks. HKDF naturally accommodates the use of salt; _however, a slowing down mechanism is not part of this specification_. Therefore, for a user's password, other KDFs might be considered like: [PKDF2](https://en.wikipedia.org/wiki/PBKDF2), [bcryt](https://en.wikipedia.org/wiki/Bcrypt), [scrypt](https://en.wikipedia.org/wiki/Scrypt) or [Argon2](https://github.com/P-H-C/phc-winner-argon2) which are all designed to be computationally intensive.
+HKDF is intended for use in a wide variety of KDF applications. Some applications _will not be able_ to use HKDF "as-is" due to specific operational requirements. One significant example is the derivation of cryptographic keys from a source of low entropy, such as a user's password. In the case of _password-based KDFs_, a main goal is to slow down dictionary attacks. HKDF naturally accommodates the use of salt; _however, a slowing down mechanism is not part of this specification_. Therefore, for a user's password, other KDFs might be considered like: [PKDF2](https://en.wikipedia.org/wiki/PBKDF2), [bcryt](https://github.com/patrickfav/bcrypt), [scrypt](https://en.wikipedia.org/wiki/Scrypt) or [Argon2](https://github.com/P-H-C/phc-winner-argon2) which are all designed to be computationally intensive.
 
 #### Key Derivation
 

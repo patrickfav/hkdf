@@ -41,12 +41,12 @@ public class HKDFTest {
                 0x89, (byte) 0xAE, (byte) 0x96, 0x5F, 0x19, 0x5D, 0x53, 0x62, 0x58, (byte) 0x84, 0x2C, 0x09, (byte) 0xAD, 0x6E, 0x20, (byte) 0xD4};
 
         //example input
-        String userInput = "this is a user input with bad entropy";
+        byte[] sharedSecret = Bytes.random(256).array();
 
         HKDF hkdf = HKDF.fromHmacSha256();
 
         //extract the "raw" data to create output with concentrated entropy
-        byte[] pseudoRandomKey = hkdf.extract(staticSalt32Byte, userInput.getBytes(StandardCharsets.UTF_8));
+        byte[] pseudoRandomKey = hkdf.extract(staticSalt32Byte, sharedSecret);
 
         //create expanded bytes for e.g. AES secret key and IV
         byte[] expandedAesKey = hkdf.expand(pseudoRandomKey, "aes-key".getBytes(StandardCharsets.UTF_8), 16);
