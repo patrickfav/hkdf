@@ -180,6 +180,11 @@ Use the Maven wrapper to create a jar including all dependencies
 * [Square: keywhiz](https://github.com/square/keywhiz/blob/master/hkdf/src/main/java/keywhiz/hkdf/Hkdf.java)
 * [Bouncy Castle](https://github.com/bcgit/bc-java/blob/master/core/src/main/java/org/bouncycastle/crypto/generators/HKDFBytesGenerator.java)
 
+## Related Libraries
+
+* [BCyrpt Password Hash Function (Java)](https://github.com/patrickfav/bcrypt)
+* [Single Step KDF [NIST SP 800-56C] (Java)](https://github.com/patrickfav/singlestep-kdf)
+
 # License
 
 Copyright 2017 Patrick Favre-Bulle
