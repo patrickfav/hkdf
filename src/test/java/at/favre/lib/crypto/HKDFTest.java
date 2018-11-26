@@ -2,7 +2,6 @@ package at.favre.lib.crypto;
 
 import at.favre.lib.bytes.Bytes;
 import org.apache.commons.lang3.RandomUtils;
-import org.junit.Before;
 import org.junit.Test;
 
 import javax.crypto.Cipher;
@@ -20,9 +19,6 @@ import java.util.concurrent.TimeUnit;
 import static org.junit.Assert.*;
 
 public class HKDFTest {
-    @Before
-    public void setUp() throws Exception {
-    }
 
     @Test
     public void quickStarTest() throws Exception {
@@ -220,37 +216,34 @@ public class HKDFTest {
         final HKDF hkdf = HKDF.fromHmacSha256();
 
         for (int i = 0; i < 512; i++) {
-            executorService.submit(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        Thread.sleep(2);
+            executorService.submit(() -> {
+                try {
+                    Thread.sleep(2);
 
-                        //System.out.println("[" + System.nanoTime() + "|" + Thread.currentThread().getName() + "] start thread");
+                    //System.out.println("[" + System.nanoTime() + "|" + Thread.currentThread().getName() + "] start thread");
 
-                        Random r = new Random();
+                    Random r = new Random();
 
-                        Thread.sleep(r.nextInt(5));
+                    Thread.sleep(r.nextInt(5));
 
-                        byte[] ikm = RandomUtils.nextBytes(r.nextInt(12) + 12);
-                        byte[] salt = RandomUtils.nextBytes(r.nextInt(32));
-                        byte[] prk = hkdf.extract(salt, ikm);
+                    byte[] ikm = RandomUtils.nextBytes(r.nextInt(12) + 12);
+                    byte[] salt = RandomUtils.nextBytes(r.nextInt(32));
+                    byte[] prk = hkdf.extract(salt, ikm);
 
-                        assertTrue(hkdf.getMacFactory().createInstance(new byte[1]).getMacLength() == prk.length);
+                    assertEquals(hkdf.getMacFactory().createInstance(new byte[1]).getMacLength(), prk.length);
 
-                        //System.out.println("[" + System.nanoTime() + "|" + Thread.currentThread().getName() + "] prk: " + Hex.encodeHexString(prk));
+                    //System.out.println("[" + System.nanoTime() + "|" + Thread.currentThread().getName() + "] prk: " + Hex.encodeHexString(prk));
 
-                        Thread.sleep(r.nextInt(5));
+                    Thread.sleep(r.nextInt(5));
 
-                        int length = 16 + r.nextInt(80);
-                        byte[] okm = hkdf.expand(prk, null, length);
-                        //System.out.println("[" + System.nanoTime() + "|" + Thread.currentThread().getName() + "] okm: " + Hex.encodeHexString(okm));
-                        assertTrue(okm.length == length);
+                    int length = 16 + r.nextInt(80);
+                    byte[] okm = hkdf.expand(prk, null, length);
+                    //System.out.println("[" + System.nanoTime() + "|" + Thread.currentThread().getName() + "] okm: " + Hex.encodeHexString(okm));
+                    assertEquals(okm.length, length);
 
-                        System.out.println("[" + System.nanoTime() + "|" + Thread.currentThread().getName() + "] end thread");
-                    } catch (Exception e) {
-                        fail(e.getMessage());
-                    }
+                    System.out.println("[" + System.nanoTime() + "|" + Thread.currentThread().getName() + "] end thread");
+                } catch (Exception e) {
+                    fail(e.getMessage());
                 }
             });
         }

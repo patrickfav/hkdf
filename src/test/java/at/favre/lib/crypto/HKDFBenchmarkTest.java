@@ -21,7 +21,7 @@ public class HKDFBenchmarkTest {
 
     @Ignore
     @Test
-    public void benchmark() throws Exception {
+    public void benchmark() {
 
         Map<Integer, Long> runsMap = new HashMap<>();
 
