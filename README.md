@@ -179,6 +179,7 @@ Use the Maven wrapper to create a jar including all dependencies
 * [WhisperSystems: libsignal-protocol-java](https://github.com/WhisperSystems/libsignal-protocol-java/blob/master/java/src/main/java/org/whispersystems/libsignal/kdf/HKDF.java)
 * [Square: keywhiz](https://github.com/square/keywhiz/blob/master/hkdf/src/main/java/keywhiz/hkdf/Hkdf.java)
 * [Bouncy Castle](https://github.com/bcgit/bc-java/blob/master/core/src/main/java/org/bouncycastle/crypto/generators/HKDFBytesGenerator.java)
+* [Google Tink](https://github.com/google/tink/blob/6625fcf2cfc3f56fc8babbb0f0388a5983fab65c/java/src/main/java/com/google/crypto/tink/subtle/Hkdf.java)
 
 ## Related Libraries
 
