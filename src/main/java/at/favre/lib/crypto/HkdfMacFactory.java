@@ -40,6 +40,7 @@ public interface HkdfMacFactory {
     /**
      * Default implementation
      */
+    @SuppressWarnings("WeakerAccess")
     final class Default implements HkdfMacFactory {
         private final String macAlgorithmName;
         private final Provider provider;
