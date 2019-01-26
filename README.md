@@ -128,9 +128,16 @@ IV from a shared Diffie-Hellman Value.
 
 These two functions may also be combined and used to form a PRNG to improve a random number generator's potentially-biased output, as well as protect it from analysis and help defend the random number generation from malicious inputs.
 
-## Digital Signatures
+## Security Relevant Information
 
-### Signed Jar
+### OWASP Dependency Check
+
+This project uses the [OWASP Dependency-Check](https://www.owasp.org/index.php/OWASP_Dependency_Check) which is a utility that identifies project dependencies and checks if there are any known, publicly disclosed, vulnerabilities against a [NIST database](https://nvd.nist.gov/vuln/data-feeds).
+The build will fail if any issue is found.
+
+### Digital Signatures
+
+#### Signed Jar
 
 The provided JARs in the Github release page are signed with my private key:
 
@@ -141,7 +148,7 @@ The provided JARs in the Github release page are signed with my private key:
 
 Use the jarsigner tool (found in your `$JAVA_HOME/bin` folder) folder to verify.
 
-### Signed Commits
+#### Signed Commits
 
 All tags and commits by me are signed with git with my private key:
 
