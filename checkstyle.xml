@@ -31,8 +31,7 @@
 
         <!-- Misc -->
         <module name="ArrayTypeStyle"/> <!-- e.g. int[] array is ok int array[] not: http://checkstyle.sourceforge.net/config_misc.html#ArrayTypeStyle -->
-        <module
-                name="MutableException"/> <!-- e.g. int[] array is ok int array[] not: http://checkstyle.sourceforge.net/config_misc.html#ArrayTypeStyle -->
+        <module name="MutableException"/> <!-- exception classes must be immutable: http://checkstyle.sourceforge.net/config_design.html#MutableException -->
         <module name="UpperEll"/> <!-- long values must be postfixed with 'L' not 'l':  http://checkstyle.sourceforge.net/config_misc.html#UpperEll -->
         <module name="Indentation">  <!-- Checks correct indentation of Java code:  http://checkstyle.sourceforge.net/config_misc.html#Indentation -->
             <property name="basicOffset" value="4"/>
@@ -52,12 +51,9 @@
 
         <!-- Classes -->
         <module name="FinalClass"/> <!-- class with only private constructor must be final: http://checkstyle.sourceforge.net/config_design.html#FinalClass -->
-        <module
-                name="OneStatementPerLine"/> <!-- you cant write int i=1;int j=2; http://checkstyle.sourceforge.net/config_design.html#OneStatementPerLine -->
-        <module
-                name="SimplifyBooleanReturn"/> <!-- directly return boolean doe not check and return http://checkstyle.sourceforge.net/config_design.html#SimplifyBooleanReturn -->
-        <module
-                name="StringLiteralEquality"/> <!-- you cant write myString == "this" http://checkstyle.sourceforge.net/config_design.html#StringLiteralEquality -->
+        <module name="OneStatementPerLine"/> <!-- you can't write int i=1;int j=2; http://checkstyle.sourceforge.net/config_design.html#OneStatementPerLine -->
+        <module name="SimplifyBooleanReturn"/> <!-- directly return boolean does not check and return http://checkstyle.sourceforge.net/config_design.html#SimplifyBooleanReturn -->
+        <module name="StringLiteralEquality"/> <!-- you can't write myString == "this" http://checkstyle.sourceforge.net/config_design.html#StringLiteralEquality -->
         <module name="OneTopLevelClass"/> <!-- only one root class per file http://checkstyle.sourceforge.net/config_design.html#OneTopLevelClass -->
         <module name="ThrowsCount"> <!-- max 5 throws definitions per method: http://checkstyle.sourceforge.net/config_design.html#ThrowsCount -->
             <property name="max" value="5"/>
