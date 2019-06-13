@@ -113,8 +113,9 @@ public final class HKDF {
      * </blockquote>
      *
      * @param salt                optional salt value (a non-secret random value) (can be null)
+     *                             if not provided, it is set to an array of hash length of zeros.
      * @param inputKeyingMaterial data to be extracted (IKM)
-     *                            if not provided, it is set to an array of hash length of zeros.
+     *
      * @return a new byte array pseudo random key (of hash length in bytes) (PRK) which can be used to expand
      * @see <a href="https://tools.ietf.org/html/rfc5869#section-2.2">RFC 5869 Section 2.2</a>
      */
@@ -231,8 +232,9 @@ public final class HKDF {
          * Step 1 of RFC 5869
          *
          * @param salt                optional salt value (a non-secret random value);
-         * @param inputKeyingMaterial data to be extracted (IKM)
          *                            if not provided, it is set to an array of hash length of zeros.
+         * @param inputKeyingMaterial data to be extracted (IKM)
+         *
          * @return a new byte array pseudorandom key (of hash length in bytes) (PRK) which can be used to expand
          */
         byte[] execute(SecretKey salt, byte[] inputKeyingMaterial) {
