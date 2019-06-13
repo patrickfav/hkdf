@@ -10,27 +10,27 @@ import static org.junit.Assert.assertNotNull;
 
 public class HkdfMacFactoryTest {
     @Test
-    public void hmacSha256() throws Exception {
+    public void hmacSha256() {
         testHmacFactory(HkdfMacFactory.Default.hmacSha256(), 32);
     }
 
     @Test
-    public void hmacSha512() throws Exception {
+    public void hmacSha512() {
         testHmacFactory(HkdfMacFactory.Default.hmacSha512(), 64);
     }
 
     @Test
-    public void hmacSha1() throws Exception {
+    public void hmacSha1() {
         testHmacFactory(HkdfMacFactory.Default.hmacSha1(), 20);
     }
 
     @Test
-    public void hmacMd5() throws Exception {
+    public void hmacMd5() {
         testHmacFactory(new HkdfMacFactory.Default("HmacMD5"), 16);
     }
 
     @Test
-    public void customProvider() throws Exception {
+    public void customProvider() {
         testHmacFactory(new HkdfMacFactory.Default("HmacSHA1", Security.getProvider("SunJCE")), 20);
     }
 
