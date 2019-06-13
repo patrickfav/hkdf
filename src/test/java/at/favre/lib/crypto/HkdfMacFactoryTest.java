@@ -35,17 +35,17 @@ public class HkdfMacFactoryTest {
     }
 
     @Test(expected = RuntimeException.class)
-    public void hmacInstanceNotExisting() throws Exception {
-        new HkdfMacFactory.Default("HmacNotExisting", null).createInstance(new byte[16]);
+    public void hmacInstanceNotExisting() {
+        new HkdfMacFactory.Default("HmacNotExisting", null).getMacLengthBytes();
     }
 
     @Test(expected = RuntimeException.class)
-    public void hmacUsingEmptyKey() throws Exception {
-        HkdfMacFactory.Default.hmacSha256().createInstance(new byte[0]);
+    public void hmacUsingEmptyKey() {
+        HkdfMacFactory.Default.hmacSha256().createInstance(null);
     }
 
     private void testHmacFactory(HkdfMacFactory macFactory, int refLength) {
-        Mac mac = macFactory.createInstance(new byte[refLength]);
+        Mac mac = macFactory.createInstance(macFactory.createSecretKey(new byte[refLength]));
         assertNotNull(mac);
 
         mac.update(new byte[]{0x76, (byte) 0x92, 0x0E, 0x5E, (byte) 0x85, (byte) 0xDB, (byte) 0xA7, (byte) 0x8F});

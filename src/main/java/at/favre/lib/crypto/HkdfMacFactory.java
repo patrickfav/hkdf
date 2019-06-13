@@ -35,7 +35,22 @@ public interface HkdfMacFactory {
      * @param key the key used, must not be null
      * @return a new mac instance
      */
-    Mac createInstance(byte[] key);
+    Mac createInstance(SecretKey key);
+
+    /**
+     * Get the length of the outputted mac in bytes
+     *
+     * @return the length of mac output in bytes
+     */
+    int getMacLengthBytes();
+
+    /**
+     * Creates a secret key from a byte raw key material to be used with {@link #createInstance(SecretKey)}
+     *
+     * @param rawKeyMaterial the raw key
+     * @return wrapped as secret key instance or null if input is null or empty
+     */
+    SecretKey createSecretKey(byte[] rawKeyMaterial);
 
     /**
      * Default implementation
@@ -95,10 +110,18 @@ public interface HkdfMacFactory {
         }
 
         @Override
-        public Mac createInstance(byte[] key) {
+        public Mac createInstance(SecretKey key) {
             try {
-                SecretKey secretKey = new SecretKeySpec(key, macAlgorithmName);
+                Mac mac = createMacInstance();
+                mac.init(key);
+                return mac;
+            } catch (Exception e) {
+                throw new IllegalStateException("could not make hmac hasher in hkdf", e);
+            }
+        }
 
+        private Mac createMacInstance() {
+            try {
                 Mac hmacInstance;
 
                 if (provider == null) {
@@ -107,13 +130,25 @@ public interface HkdfMacFactory {
                     hmacInstance = Mac.getInstance(macAlgorithmName, provider);
                 }
 
-                hmacInstance.init(secretKey);
                 return hmacInstance;
             } catch (NoSuchAlgorithmException e) {
                 throw new IllegalStateException("defined mac algorithm was not found", e);
             } catch (Exception e) {
-                throw new IllegalStateException("could not make hmac hasher in hkdf", e);
+                throw new IllegalStateException("could not create mac instance in hkdf", e);
             }
+        }
+
+        @Override
+        public int getMacLengthBytes() {
+            return createMacInstance().getMacLength();
+        }
+
+        @Override
+        public SecretKey createSecretKey(byte[] rawKeyMaterial) {
+            if (rawKeyMaterial == null || rawKeyMaterial.length <= 0) {
+                return null;
+            }
+            return new SecretKeySpec(rawKeyMaterial, macAlgorithmName);
         }
     }
 }

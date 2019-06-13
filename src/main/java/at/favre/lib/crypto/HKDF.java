@@ -17,6 +17,7 @@
 package at.favre.lib.crypto;
 
 import javax.crypto.Mac;
+import javax.crypto.SecretKey;
 import java.nio.ByteBuffer;
 
 /**
@@ -111,13 +112,27 @@ public final class HKDF {
      * strengthening the analytical results that back the HKDF design.
      * </blockquote>
      *
-     * @param salt                optional salt value (a non-secret random value);
+     * @param salt                optional salt value (a non-secret random value) (can be null)
      * @param inputKeyingMaterial data to be extracted (IKM)
      *                            if not provided, it is set to a array of hash length of zeros.
      * @return a new byte array pseudo random key (of hash length in bytes) (PRK) which can be used to expand
      * @see <a href="https://tools.ietf.org/html/rfc5869#section-2.2">RFC 5869 Section 2.2</a>
      */
     public byte[] extract(byte[] salt, byte[] inputKeyingMaterial) {
+        return extract(macFactory.createSecretKey(salt), inputKeyingMaterial);
+    }
+
+    /**
+     * Use this if you require {@link SecretKey} types by your security framework. See also
+     * {@link HkdfMacFactory#createSecretKey(byte[])}.
+     * <p>
+     * See {@link #extract(byte[], byte[])} for description.
+     *
+     * @param salt                optional salt value (a non-secret random value)  (can be null)
+     * @param inputKeyingMaterial data to be extracted (IKM)
+     * @return a new byte array pseudo random key (of hash length in bytes) (PRK) which can be used to expand
+     */
+    public byte[] extract(SecretKey salt, byte[] inputKeyingMaterial) {
         return new Extractor(macFactory).execute(salt, inputKeyingMaterial);
     }
 
@@ -148,6 +163,21 @@ public final class HKDF {
      * @see <a href="https://tools.ietf.org/html/rfc5869#section-2.3">RFC 5869 Section 2.3</a>
      */
     public byte[] expand(byte[] pseudoRandomKey, byte[] info, int outLengthBytes) {
+        return expand(macFactory.createSecretKey(pseudoRandomKey), info, outLengthBytes);
+    }
+
+    /**
+     * Use this if you require {@link SecretKey} types by your security framework. See also
+     * {@link HkdfMacFactory#createSecretKey(byte[])}.
+     * <p>
+     * See {@link #expand(byte[], byte[], int)} for description.
+     *
+     * @param pseudoRandomKey a pseudo random key of at least hmac hash length in bytes (usually, the output from the extract step)
+     * @param info            optional context and application specific information; may be null
+     * @param outLengthBytes  length of output keying material in bytes
+     * @return new byte array of output keying material (OKM)
+     */
+    public byte[] expand(SecretKey pseudoRandomKey, byte[] info, int outLengthBytes) {
         return new Expander(macFactory).execute(pseudoRandomKey, info, outLengthBytes);
     }
 
@@ -161,7 +191,22 @@ public final class HKDF {
      * @return new byte array of output keying material (OKM)
      */
     public byte[] extractAndExpand(byte[] saltExtract, byte[] inputKeyingMaterial, byte[] infoExpand, int outLengthByte) {
-        return new Expander(macFactory).execute(new Extractor(macFactory).execute(saltExtract, inputKeyingMaterial), infoExpand, outLengthByte);
+        return extractAndExpand(macFactory.createSecretKey(saltExtract), inputKeyingMaterial, infoExpand, outLengthByte);
+    }
+
+    /**
+     * Convenience method for extract &amp; expand in a single method
+     *
+     * @param saltExtract         optional salt value (a non-secret random value);
+     * @param inputKeyingMaterial data to be extracted (IKM)
+     * @param infoExpand          optional context and application specific information; may be null
+     * @param outLengthByte       length of output keying material in bytes
+     * @return new byte array of output keying material (OKM)
+     */
+    public byte[] extractAndExpand(SecretKey saltExtract, byte[] inputKeyingMaterial, byte[] infoExpand, int outLengthByte) {
+        return new Expander(macFactory).execute(macFactory.createSecretKey(
+                new Extractor(macFactory).execute(saltExtract, inputKeyingMaterial)),
+                infoExpand, outLengthByte);
     }
 
     /**
@@ -190,9 +235,9 @@ public final class HKDF {
          *                            if not provided, it is set to a array of hash length of zeros.
          * @return a new byte array pseudorandom key (of hash length in bytes) (PRK) which can be used to expand
          */
-        byte[] execute(byte[] salt, byte[] inputKeyingMaterial) {
-            if (salt == null || salt.length == 0) {
-                salt = new byte[macFactory.createInstance(new byte[1]).getMacLength()];
+        byte[] execute(SecretKey salt, byte[] inputKeyingMaterial) {
+            if (salt == null) {
+                salt = macFactory.createSecretKey(new byte[macFactory.getMacLengthBytes()]);
             }
 
             if (inputKeyingMaterial == null || inputKeyingMaterial.length <= 0) {
@@ -219,14 +264,14 @@ public final class HKDF {
          * @param outLengthBytes  length of output keying material in bytes (must be <= 255 * mac hash length)
          * @return new byte array of output keying material (OKM)
          */
-        byte[] execute(byte[] pseudoRandomKey, byte[] info, int outLengthBytes) {
+        byte[] execute(SecretKey pseudoRandomKey, byte[] info, int outLengthBytes) {
 
             if (outLengthBytes <= 0) {
                 throw new IllegalArgumentException("out length bytes must be at least 1");
             }
 
-            if (pseudoRandomKey == null || pseudoRandomKey.length <= 0) {
-                throw new IllegalArgumentException("provided pseudoRandomKey must be at least of size 1 and not null");
+            if (pseudoRandomKey == null) {
+                throw new IllegalArgumentException("provided pseudoRandomKey must not be null");
             }
 
             Mac hmacHasher = macFactory.createInstance(pseudoRandomKey);

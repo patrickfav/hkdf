@@ -1,5 +1,15 @@
 # Releases
 
+## Unreleased
+
+* refactor HkdfMacFactory to accept `SecretKey` types instead of byte array - helps to be compatible with some security frameworks #4
+
+### Breaking Change
+
+The interface HkdfMacFactory changed to accept `SecretKey` and two new methods where added for creating
+a secret key from a raw byte source and to return the mac length in bytes. See the default implementation
+for details on how to implement this if you need a custom impl.
+
 ## v1.0.2
 
 * add OSWAP dependency check plugin to Maven POM #3
