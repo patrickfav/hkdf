@@ -10,42 +10,42 @@ import static org.junit.Assert.assertNotNull;
 
 public class HkdfMacFactoryTest {
     @Test
-    public void hmacSha256() throws Exception {
+    public void hmacSha256() {
         testHmacFactory(HkdfMacFactory.Default.hmacSha256(), 32);
     }
 
     @Test
-    public void hmacSha512() throws Exception {
+    public void hmacSha512() {
         testHmacFactory(HkdfMacFactory.Default.hmacSha512(), 64);
     }
 
     @Test
-    public void hmacSha1() throws Exception {
+    public void hmacSha1() {
         testHmacFactory(HkdfMacFactory.Default.hmacSha1(), 20);
     }
 
     @Test
-    public void hmacMd5() throws Exception {
+    public void hmacMd5() {
         testHmacFactory(new HkdfMacFactory.Default("HmacMD5"), 16);
     }
 
     @Test
-    public void customProvider() throws Exception {
+    public void customProvider() {
         testHmacFactory(new HkdfMacFactory.Default("HmacSHA1", Security.getProvider("SunJCE")), 20);
     }
 
     @Test(expected = RuntimeException.class)
-    public void hmacInstanceNotExisting() throws Exception {
-        new HkdfMacFactory.Default("HmacNotExisting", null).createInstance(new byte[16]);
+    public void hmacInstanceNotExisting() {
+        new HkdfMacFactory.Default("HmacNotExisting", null).getMacLengthBytes();
     }
 
     @Test(expected = RuntimeException.class)
-    public void hmacUsingEmptyKey() throws Exception {
-        HkdfMacFactory.Default.hmacSha256().createInstance(new byte[0]);
+    public void hmacUsingEmptyKey() {
+        HkdfMacFactory.Default.hmacSha256().createInstance(null);
     }
 
     private void testHmacFactory(HkdfMacFactory macFactory, int refLength) {
-        Mac mac = macFactory.createInstance(new byte[refLength]);
+        Mac mac = macFactory.createInstance(macFactory.createSecretKey(new byte[refLength]));
         assertNotNull(mac);
 
         mac.update(new byte[]{0x76, (byte) 0x92, 0x0E, 0x5E, (byte) 0x85, (byte) 0xDB, (byte) 0xA7, (byte) 0x8F});
