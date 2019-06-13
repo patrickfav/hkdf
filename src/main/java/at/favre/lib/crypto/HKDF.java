@@ -61,7 +61,7 @@ public final class HKDF {
 
     /**
      * Return a shared instance using HMAC with Sha256.
-     * Even thou shared, this instance is thread-safe.
+     * Even though shared, this instance is thread-safe.
      *
      * @return HKDF instance
      */
@@ -74,7 +74,7 @@ public final class HKDF {
 
     /**
      * Return a shared instance using HMAC with Sha512.
-     * Even thou shared, this instance is thread-safe.
+     * Even though shared, this instance is thread-safe.
      *
      * @return HKDF instance
      */
@@ -114,7 +114,7 @@ public final class HKDF {
      *
      * @param salt                optional salt value (a non-secret random value) (can be null)
      * @param inputKeyingMaterial data to be extracted (IKM)
-     *                            if not provided, it is set to a array of hash length of zeros.
+     *                            if not provided, it is set to an array of hash length of zeros.
      * @return a new byte array pseudo random key (of hash length in bytes) (PRK) which can be used to expand
      * @see <a href="https://tools.ietf.org/html/rfc5869#section-2.2">RFC 5869 Section 2.2</a>
      */
@@ -128,7 +128,7 @@ public final class HKDF {
      * <p>
      * See {@link #extract(byte[], byte[])} for description.
      *
-     * @param salt                optional salt value (a non-secret random value)  (can be null)
+     * @param salt                optional salt value (a non-secret random value) (can be null)
      * @param inputKeyingMaterial data to be extracted (IKM)
      * @return a new byte array pseudo random key (of hash length in bytes) (PRK) which can be used to expand
      */
@@ -137,12 +137,12 @@ public final class HKDF {
     }
 
     /**
-     * <strong>Step 1 of RFC 5869 (Section 2.3)</strong>
+     * <strong>Step 2 of RFC 5869 (Section 2.3)</strong>
      * <p>
      * To "expand" the generated output of an already reasonably random input such as an existing shared key into a larger
      * cryptographically independent output, thereby producing multiple keys deterministically from that initial shared key,
      * so that the same process may produce those same secret keys safely on multiple devices, as long as the same inputs
-     * are utilised.
+     * are used.
      * <p>
      * <strong>About Info (from RFC 5869):</strong>
      * <blockquote>
@@ -232,7 +232,7 @@ public final class HKDF {
          *
          * @param salt                optional salt value (a non-secret random value);
          * @param inputKeyingMaterial data to be extracted (IKM)
-         *                            if not provided, it is set to a array of hash length of zeros.
+         *                            if not provided, it is set to an array of hash length of zeros.
          * @return a new byte array pseudorandom key (of hash length in bytes) (PRK) which can be used to expand
          */
         byte[] execute(SecretKey salt, byte[] inputKeyingMaterial) {

@@ -38,7 +38,7 @@ public interface HkdfMacFactory {
     Mac createInstance(SecretKey key);
 
     /**
-     * Get the length of the outputted mac in bytes
+     * Get the length of the mac output in bytes
      *
      * @return the length of mac output in bytes
      */
@@ -102,7 +102,7 @@ public interface HkdfMacFactory {
          * Creates a mac factory
          *
          * @param macAlgorithmName as used by {@link Mac#getInstance(String)}
-         * @param provider         what security provider, see {@link Mac#getInstance(String, Provider)}; may be null to use default
+         * @param provider         the security provider, see {@link Mac#getInstance(String, Provider)}; may be null to use default
          */
         public Default(String macAlgorithmName, Provider provider) {
             this.macAlgorithmName = macAlgorithmName;
