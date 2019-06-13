@@ -1,6 +1,6 @@
 # Releases
 
-## Unreleased
+## v1.1.0
 
 * refactor HkdfMacFactory to accept `SecretKey` types instead of byte array - helps to be compatible with some security frameworks #4
 
