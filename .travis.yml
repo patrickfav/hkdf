@@ -16,7 +16,7 @@ before_install:
   - tar xvf secrets.tar
 
 script:
-  - ./mvnw clean install -X -Djarsigner.skip=false
+  - ./mvnw clean install -Djarsigner.skip=false
 
 after_success:
   - ./mvnw test jacoco:report coveralls:report
