@@ -23,11 +23,6 @@
     <url>https://github.com/patrickfav/hkdf</url>
     <inceptionYear>2017</inceptionYear>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    </properties>
-
     <repositories>
         <repository>
             <id>jcenter</id>
