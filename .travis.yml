@@ -1,7 +1,6 @@
 # To let the CI execute the maven wrapper, use this command and push the change:
 #    git update-index --chmod=+x mvnw
 
-sudo: false # route your build to the container-based infrastructure for a faster build
 language: java
 install: true
 jdk:
@@ -30,14 +29,14 @@ deploy:
       branch: master
       tags: true
   - provider: releases
-    api_key:
+    token:
       secure: "YtK6gh4f6ax5JITgE6N3SIZUN3gzCp3meLfzWtRJmRlntU5VOQYnwzsL7CeVMxm/A+5uIalSRNrc+AqYpOYphmNYz2BDnEQDocKXugkbpH2N7FVGNBS8EXu7ZC2MR/0/sy1E43+trReFdPsNWx5kM04SsQB61aA2StwESSWz7x5ZbU2qk+d1N5NWa3qDo1Mig9N/6qdkvef8y+XavbQus9F9cGUdspminmriFgg9x4otkHD+9f5YhfITpf0Zt00XO/wRkckFTh1un8B56dTJ7JVnMatwM+HGydSZ3KNquZobT400V8nnO3a2CsjzjhSSULklv9ASzVv5D5p6oZpAuUOlIIqsVQzxCdLq/qRJCgjvphmAsX5MBzE9sRqaK+HLXcN2Bs0sQzj7tozQgECBv/9dUrQ7F/wvegNI6HqLHF66YmR+JMpFGab1RlvqZ+SKB7TwY67kdZkHJxaxfjc0/y7IO0Fdiigw8qQNfTSQ+oRPyGMwGKnMDeNHKeJ67LWNGjyjprG/Ywh6zgwEYnAIiwEncOMhdRGSobKqeYU3o4uOGD7zLnMC2pLtPhi+ymj4tEOjmpNmtZn69Q6J177i4cVJNjYPXuXVcwM/JxmxZU7u0XwomV6LVkWQKx9qmwET0gT1uX1sxC1IPmQA/77uKQNqFGRydm/rCHcO5lEe1Kc="
     file_glob: true
     file:
       - "target/hkdf-*.jar"
       - "target/*.sha256"
       - "target/checksum-sha256.txt"
-    skip_cleanup: true
+    cleanup: true
     on:
       branch: master
       tags: true
