@@ -13,11 +13,13 @@ This is a standalone, lightweight, simple to use, fully tested and stable implem
 
 Add dependency to your `pom.xml` ([check latest release](https://github.com/patrickfav/hkdf/releases)):
 
-    <dependency>
-        <groupId>at.favre.lib</groupId>
-        <artifactId>hkdf</artifactId>
-        <version>{latest-version}</version>
-    </dependency>
+```xml
+<dependency>
+    <groupId>at.favre.lib</groupId>
+    <artifactId>hkdf</artifactId>
+    <version>{latest-version}</version>
+</dependency>
+```
 
 A very simple example:
 
@@ -73,11 +75,13 @@ The artifacts are deployed to [jcenter](https://bintray.com/bintray/jcenter) and
 
 Add dependency to your `pom.xml`:
 
-    <dependency>
-        <groupId>at.favre.lib</groupId>
-        <artifactId>hkdf</artifactId>
-        <version>{latest-version}</version>
-    </dependency>
+```xml
+<dependency>
+    <groupId>at.favre.lib</groupId>
+    <artifactId>hkdf</artifactId>
+    <version>{latest-version}</version>
+</dependency>
+```
 
 ### Gradle
 
