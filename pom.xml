@@ -123,6 +123,6 @@
 
     <ciManagement>
         <system>Travis</system>
-        <url>https://travis-ci.org/patrickfav/hkdf</url>
+        <url>https://travis-ci.com/patrickfav/hkdf</url>
     </ciManagement>
 </project>
