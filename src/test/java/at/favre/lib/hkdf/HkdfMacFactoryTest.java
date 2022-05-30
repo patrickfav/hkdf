@@ -1,4 +1,4 @@
-package at.favre.lib.crypto;
+package at.favre.lib.hkdf;
 
 import org.junit.Test;
 
