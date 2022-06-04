@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package at.favre.lib.crypto;
+package at.favre.lib.hkdf;
 
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;

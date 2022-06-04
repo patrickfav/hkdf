@@ -1,4 +1,4 @@
-package at.favre.lib.crypto;
+package at.favre.lib.hkdf;
 
 import org.apache.commons.codec.binary.Hex;
 import org.junit.Test;

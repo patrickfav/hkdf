@@ -4,6 +4,9 @@
 
 * added `module-info.java`
 
+### Breaking Change
+In order to avoid split package problems, we renamed this lib's main package `at.favre.lib.crypto` -> `at.favre.lib.hkdf`.
+
 ## v1.1.0
 
 * refactor HkdfMacFactory to accept `SecretKey` types instead of byte array - helps to be compatible with some security frameworks #4
@@ -50,7 +53,7 @@ for details on how to implement this if you need a custom impl.
 ## v0.3.0
 
 * refactor 'expand' byte handling to use byte buffer
-* rename package to `at.favre.lib.crypto`
+* rename package to `at.favre.lib.hkdf`
 
 ## v0.2.1
 

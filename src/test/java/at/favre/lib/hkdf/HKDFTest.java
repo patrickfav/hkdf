@@ -1,4 +1,4 @@
-package at.favre.lib.crypto;
+package at.favre.lib.hkdf;
 
 import at.favre.lib.bytes.Bytes;
 import org.apache.commons.lang3.RandomUtils;
