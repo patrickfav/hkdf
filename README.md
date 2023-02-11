@@ -11,6 +11,7 @@ HKDF specifies a version of
 the [NIST Special Publication 800-56C](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-56Cr1.pdf) "
 Two-Step Key Derivation" scheme.
 
+[![Maven Central](https://img.shields.io/maven-central/v/at.favre.lib/hkdf)](https://mvnrepository.com/artifact/at.favre.lib/hkdf)
 [![Download](https://api.bintray.com/packages/patrickfav/maven/hkdf/images/download.svg)](https://bintray.com/patrickfav/maven/hkdf/_latestVersion)
 [![Build Status](https://travis-ci.com/patrickfav/hkdf.svg?branch=master)](https://travis-ci.com/patrickfav/hkdf)
 [![Javadocs](https://www.javadoc.io/badge/at.favre.lib/hkdf.svg)](https://www.javadoc.io/doc/at.favre.lib/hkdf)
