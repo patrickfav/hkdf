@@ -12,7 +12,7 @@ the [NIST Special Publication 800-56C](https://nvlpubs.nist.gov/nistpubs/Special
 Two-Step Key Derivation" scheme.
 
 [![Maven Central](https://img.shields.io/maven-central/v/at.favre.lib/hkdf)](https://mvnrepository.com/artifact/at.favre.lib/hkdf)
-[![Build Status](https://travis-ci.com/patrickfav/hkdf.svg?branch=master)](https://travis-ci.com/patrickfav/hkdf)
+[![Github Actions](https://github.com/patrickfav/hkdf/actions/workflows/build_deploy.yml/badge.svg)](https://github.com/patrickfav/hkdf/actions)
 [![Javadocs](https://www.javadoc.io/badge/at.favre.lib/hkdf.svg)](https://www.javadoc.io/doc/at.favre.lib/hkdf)
 [![codecov](https://codecov.io/gh/patrickfav/hkdf/branch/master/graph/badge.svg?token=eH5ui0ctsT)](https://codecov.io/gh/patrickfav/hkdf)
 [![Maintainability](https://api.codeclimate.com/v1/badges/fc50d911e4146a570d4e/maintainability)](https://codeclimate.com/github/patrickfav/hkdf/maintainability)
