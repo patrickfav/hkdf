@@ -14,7 +14,8 @@ Two-Step Key Derivation" scheme.
 [![Maven Central](https://img.shields.io/maven-central/v/at.favre.lib/hkdf)](https://mvnrepository.com/artifact/at.favre.lib/hkdf)
 [![Build Status](https://travis-ci.com/patrickfav/hkdf.svg?branch=master)](https://travis-ci.com/patrickfav/hkdf)
 [![Javadocs](https://www.javadoc.io/badge/at.favre.lib/hkdf.svg)](https://www.javadoc.io/doc/at.favre.lib/hkdf)
-[![codecov](https://codecov.io/gh/patrickfav/bcrypt/branch/master/graph/badge.svg?token=HP8FL3ZJG7)](https://codecov.io/gh/patrickfav/bcrypt) [![Maintainability](https://api.codeclimate.com/v1/badges/fc50d911e4146a570d4e/maintainability)](https://codeclimate.com/github/patrickfav/hkdf/maintainability)
+[![codecov](https://codecov.io/gh/patrickfav/hkdf/branch/master/graph/badge.svg?token=eH5ui0ctsT)](https://codecov.io/gh/patrickfav/hkdf)
+[![Maintainability](https://api.codeclimate.com/v1/badges/fc50d911e4146a570d4e/maintainability)](https://codeclimate.com/github/patrickfav/hkdf/maintainability)
 
 This is a standalone, lightweight, simple to use, fully tested and stable implementation in Java. The code is compiled
 with target [Java 7](https://en.wikipedia.org/wiki/Java_version_history#Java_SE_7) to be compatible with most [
