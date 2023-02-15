@@ -14,8 +14,9 @@ Two-Step Key Derivation" scheme.
 [![Maven Central](https://img.shields.io/maven-central/v/at.favre.lib/hkdf)](https://mvnrepository.com/artifact/at.favre.lib/hkdf)
 [![Github Actions](https://github.com/patrickfav/hkdf/actions/workflows/build_deploy.yml/badge.svg)](https://github.com/patrickfav/hkdf/actions)
 [![Javadocs](https://www.javadoc.io/badge/at.favre.lib/hkdf.svg)](https://www.javadoc.io/doc/at.favre.lib/hkdf)
-[![codecov](https://codecov.io/gh/patrickfav/hkdf/branch/master/graph/badge.svg?token=eH5ui0ctsT)](https://codecov.io/gh/patrickfav/hkdf)
-[![Maintainability](https://api.codeclimate.com/v1/badges/fc50d911e4146a570d4e/maintainability)](https://codeclimate.com/github/patrickfav/hkdf/maintainability)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=patrickfav_hkdf&metric=coverage)](https://sonarcloud.io/summary/new_code?id=patrickfav_hkdf)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=patrickfav_hkdf&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=patrickfav_hkdf)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=patrickfav_hkdf&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=patrickfav_hkdf)
 
 This is a standalone, lightweight, simple to use, fully tested and stable implementation in Java. The code is compiled
 with target [Java 7](https://en.wikipedia.org/wiki/Java_version_history#Java_SE_7) to be compatible with most [
