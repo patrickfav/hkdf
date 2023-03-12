@@ -20,7 +20,7 @@
         Publication 800-56C
         "Two-Step Key Derivation" scheme.
     </description>
-    <url>https://github.com/patrickfav/hkdf</url>
+    <url>https://favr.dev/opensource/hkdf</url>
     <inceptionYear>2017</inceptionYear>
 
     <properties>
